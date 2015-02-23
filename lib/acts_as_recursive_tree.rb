@@ -11,5 +11,7 @@ module ActsAsRecursiveTree
 
   ActiveSupport.on_load :active_record do
     ActiveRecord::Base.send :extend, ClosureTree::HasClosureTree
+
+
   end
 end
