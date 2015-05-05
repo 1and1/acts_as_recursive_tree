@@ -53,7 +53,7 @@ module ActsAsRecursiveTree
     ##
     # Returns the root node of the tree.
     def root
-      self_and_ancestors.where(self.recursive_tree_config[:foreign_key] => nil)
+      self_and_ancestors.where(self.recursive_tree_config[:foreign_key] => nil).first
     end
 
     ##
