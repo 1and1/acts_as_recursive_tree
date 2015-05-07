@@ -7,6 +7,8 @@ module ActsAsRecursiveTree
   autoload :ActsMacro
   autoload :Query
   autoload :Model
+  autoload :Relation
+  autoload :Scope
   autoload :Version
 
   ActiveSupport.on_load :active_record do

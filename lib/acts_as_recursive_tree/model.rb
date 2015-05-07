@@ -5,18 +5,6 @@ module ActsAsRecursiveTree
     included do
       # hack to get the right classname
       recursive_tree_config[:base_class] = class_name
-
-
-      belongs_to :parent, class_name: recursive_tree_config[:base_class],
-                 foreign_key:         self.recursive_tree_config[:foreign_key],
-                 inverse_of:          :children
-
-      has_many :children,
-               class_name:  recursive_tree_config[:base_class],
-               foreign_key: self.recursive_tree_config[:foreign_key],
-               inverse_of:  :parent
-
-      scope :without, ->(record) { where.not(id: record.id) }
     end
 
     ##
@@ -104,10 +92,6 @@ module ActsAsRecursiveTree
     module ClassMethods
       def class_name
         ancestors.first.name
-      end
-
-      def roots
-        where(recursive_tree_config[:foreign_key] => nil)
       end
     end
   end

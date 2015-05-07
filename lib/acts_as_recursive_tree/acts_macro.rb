@@ -24,6 +24,8 @@ module ActsAsRecursiveTree
 
       include ActsAsRecursiveTree::Query
       include ActsAsRecursiveTree::Model
+      include ActsAsRecursiveTree::Relation
+      include ActsAsRecursiveTree::Scope
     end
 
     alias_method :acts_as_tree, :recursive_tree
