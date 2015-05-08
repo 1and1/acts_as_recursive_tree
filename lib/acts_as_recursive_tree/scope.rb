@@ -8,11 +8,11 @@ module ActsAsRecursiveTree
       scope :without, ->(record) { where.not(id: record.id) }
 
       scope :ancestors_of, ->(record) {
-        related_recursive_items(record, descendants: false)
+        where("physical_units.id in(#{related_recursive_items(record, descendants: false, arel: true, only_id: true).to_sql})")
       }
 
       scope :descendants_of, ->(record) {
-        related_recursive_items(record)
+        where("physical_units.id in(#{related_recursive_items(record, arel: true, only_id: true).to_sql})")
       }
 
     end

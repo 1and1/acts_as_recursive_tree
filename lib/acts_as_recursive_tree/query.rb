@@ -45,7 +45,7 @@ module ActsAsRecursiveTree
       # @param arel [Boolean] Indicates return type.
       #
       # @return [ActiveRecord::Relation/Arel::Node::Alias]
-      def related_recursive_items(id, clazz: nil, descendants: true, arel: false)
+      def related_recursive_items(id, clazz: nil, descendants: true, arel: false, only_id: false)
 
         raise ArgumentError, 'id must not be nil' if id.nil?
 
@@ -78,7 +78,7 @@ module ActsAsRecursiveTree
         as_traverse_loc = Arel::Nodes::As.new(traverse_loc, base_select.union(recursive_term))
 
         # SELECT * FROM "traverse_loc"
-        query           = Arel::SelectManager.new(ActiveRecord::Base).with(:recursive, as_traverse_loc).project(Arel.star).from(traverse_loc)
+        query           = Arel::SelectManager.new(ActiveRecord::Base).with(:recursive, as_traverse_loc).project(only_id ? traverse_loc[:id] : Arel.star).from(traverse_loc)
 
         # return ActiveRecord::Relation if the arel is not requested
         if arel
