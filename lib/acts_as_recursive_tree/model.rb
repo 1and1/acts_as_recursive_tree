@@ -12,30 +12,30 @@ module ActsAsRecursiveTree
     #
     # subchild1.ancestors # => [child1, root]
     def ancestors
-      without_self(self_and_ancestors)
+      self.class.ancestors_of(self)
     end
 
     # Returns ancestors and current node itself.
     #
     # subchild1.self_and_ancestors # => [subchild1, child1, root]
     def self_and_ancestors
-      related_items(descendants: false)
+      self.class.self_and_ancestors_of(self)
     end
 
     ##
     # Returns list of descendants, starting from current node, not including current node.
     #
     # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
-    def descendants(clazz = nil)
-      without_self(self_and_descendants(clazz))
+    def descendants
+      self.class.descendants_of(self)
     end
 
     ##
     # Returns list of descendants, starting from current node, including current node.
     #
     # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
-    def self_and_descendants(clazz = nil)
-      related_items(clazz: clazz)
+    def self_and_descendants
+      self.class.self_and_descendants_of(self)
     end
 
     ##
@@ -68,6 +68,10 @@ module ActsAsRecursiveTree
       self.class.where("id = :id or #{self.recursive_tree_config[:foreign_key]} = :id", id: self.id)
     end
 
+    def leaves
+      self.class.leaves_of(self)
+    end
+
 
     # Returns true if node has no parent, false otherwise
     #
@@ -82,7 +86,7 @@ module ActsAsRecursiveTree
     # subchild1.leaf? # => true
     # child1.leaf? # => false
     def leaf?
-      children.any?
+      !children.any?
     end
 
     def without_self(scope)

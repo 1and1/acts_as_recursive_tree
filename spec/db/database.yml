@@ -5,3 +5,8 @@ common: &common
   timeout: 5000
   reaping_frequency: 1000
   min_messages: ERROR
+
+sqlite:
+  <<: *common
+  adapter: sqlite3
+  database: test.sqlite3
