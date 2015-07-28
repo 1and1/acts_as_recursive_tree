@@ -27,7 +27,6 @@ module ActsAsRecursiveTree
     #
     # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
     def descendants
-      puts base_class
       base_class.descendants_of(self)
     end
 
