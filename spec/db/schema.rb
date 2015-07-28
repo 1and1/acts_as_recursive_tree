@@ -9,11 +9,11 @@ ActiveRecord::Schema.define(:version => 0) do
 
   add_foreign_key(:nodes, :nodes, column: :parent_id)
 
-  create_table :vehicles do |t|
+  create_table :locations do |t|
     t.integer :parent_id
     t.string :name
     t.string :type
   end
 
-  add_foreign_key(:vehicles, :vehicles, column: :parent_id)
+  add_foreign_key(:locations, :locations, column: :parent_id)
 end

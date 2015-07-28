@@ -12,14 +12,14 @@ module ActsAsRecursiveTree
     #
     # subchild1.ancestors # => [child1, root]
     def ancestors
-      self.class.ancestors_of(self)
+      base_class.ancestors_of(self)
     end
 
     # Returns ancestors and current node itself.
     #
     # subchild1.self_and_ancestors # => [subchild1, child1, root]
     def self_and_ancestors
-      self.class.self_and_ancestors_of(self)
+      base_class.self_and_ancestors_of(self)
     end
 
     ##
@@ -27,7 +27,8 @@ module ActsAsRecursiveTree
     #
     # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
     def descendants
-      self.class.descendants_of(self)
+      puts base_class
+      base_class.descendants_of(self)
     end
 
     ##
@@ -35,7 +36,7 @@ module ActsAsRecursiveTree
     #
     # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
     def self_and_descendants
-      self.class.self_and_descendants_of(self)
+      base_class.self_and_descendants_of(self)
     end
 
     ##
@@ -57,7 +58,7 @@ module ActsAsRecursiveTree
     #
     # subchild1.self_and_siblings # => [subchild1, subchild2]
     def self_and_siblings
-      self.class.where(self.recursive_tree_config[:foreign_key] => self.attributes[self.recursive_tree_config[:foreign_key].to_s])
+      base_class.where(self.recursive_tree_config[:foreign_key] => self.attributes[self.recursive_tree_config[:foreign_key].to_s])
     end
 
     ##
@@ -65,11 +66,14 @@ module ActsAsRecursiveTree
     #
     # root.self_and_children # => [root, child1]
     def self_and_children
-      self.class.where("id = :id or #{self.recursive_tree_config[:foreign_key]} = :id", id: self.id)
+      base_class.where("id = :id or #{self.recursive_tree_config[:foreign_key]} = :id", id: self.id)
     end
 
+    ##
+    # Returns all Leaves
+    #
     def leaves
-      self.class.leaves_of(self)
+      base_class.leaves_of(self)
     end
 
 
@@ -91,6 +95,13 @@ module ActsAsRecursiveTree
 
     def without_self(scope)
       scope.without(self)
+    end
+
+    ##
+    # Returns the Class object of the base class. This is needed for STI
+    #
+    def base_class
+      self.class.recursive_tree_config[:base_class].constantize
     end
 
     module ClassMethods
