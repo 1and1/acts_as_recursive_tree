@@ -1,5 +1,10 @@
 class Node < ActiveRecord::Base
   acts_as_tree
+  has_one :node_info
+end
+
+class NodeInfo< ActiveRecord::Base
+  belongs_to :node
 end
 
 class Location < ActiveRecord::Base

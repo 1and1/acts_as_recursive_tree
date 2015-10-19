@@ -11,31 +11,43 @@ module ActsAsRecursiveTree
     # Returns list of ancestors, starting from parent until root.
     #
     # subchild1.ancestors # => [child1, root]
-    def ancestors
-      base_class.ancestors_of(self)
+    #
+    # @param :recursive_condition [ActiveRecord::Relation]
+    #         The recursion will stop when the condition is no longer met
+    def ancestors(recursive_condition: nil)
+      base_class.ancestors_of(self, recursive_condition)
     end
 
     # Returns ancestors and current node itself.
     #
     # subchild1.self_and_ancestors # => [subchild1, child1, root]
-    def self_and_ancestors
-      base_class.self_and_ancestors_of(self)
+    #
+    # @param :recursive_condition [ActiveRecord::Relation]
+    #         The recursion will stop when the condition is no longer met
+    def self_and_ancestors(recursive_condition: nil)
+      base_class.self_and_ancestors_of(self, recursive_condition)
     end
 
     ##
     # Returns list of descendants, starting from current node, not including current node.
     #
     # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
-    def descendants
-      base_class.descendants_of(self)
+    #
+    # @param :recursive_condition [ActiveRecord::Relation]
+    #         The recursion will stop when the condition is no longer met
+    def descendants(recursive_condition: nil)
+      base_class.descendants_of(self, recursive_condition)
     end
 
     ##
     # Returns list of descendants, starting from current node, including current node.
     #
     # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
-    def self_and_descendants
-      base_class.self_and_descendants_of(self)
+    #
+    # @param :recursive_condition [ActiveRecord::Relation]
+    #         The recursion will stop when the condition is no longer met
+    def self_and_descendants(recursive_condition: nil)
+      base_class.self_and_descendants_of(self, recursive_condition)
     end
 
     ##
