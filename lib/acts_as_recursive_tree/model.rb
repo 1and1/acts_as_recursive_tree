@@ -1,3 +1,5 @@
+require 'active_support/concern'
+
 module ActsAsRecursiveTree
   module Model
     extend ActiveSupport::Concern

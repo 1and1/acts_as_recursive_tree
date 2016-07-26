@@ -21,30 +21,63 @@ describe Node do
     @child = @root.children.first
   end
 
-  describe 'root' do
+  context '#children' do
     it 'should have 3 children' do
       expect(@root.children.count).to eql(3)
     end
 
-    it 'should have 15 descendants' do
-
-      expect(@root.descendants.count).to eql(3 + (3 * 2) + (3 * 2 * 1))
-      expect(@root.descendants.all).to_not include(@root)
+    it 'should not include root node ' do
+      expect(@root.children).to_not include(@root)
     end
+
+  end
+
+  context '#descendants' do
+
+    it 'should have 15 descendants' do
+      expect(@root.descendants.count).to eql(3 + (3 * 2) + (3 * 2 * 1))
+    end
+
+    it 'should not include root' do
+      expect(@root.descendants).to_not include(@root)
+    end
+  end
+  context '#self_and_descendants' do
 
     it 'should have 15 descendants and self' do
       expect(@root.self_and_descendants.count).to eql(@root.descendants.count + 1)
+    end
+
+    it 'should include self' do
       expect(@root.self_and_descendants.all).to include(@root)
     end
+  end
 
-    it '#root? should be true' do
-      expect(@root.root?).to be true
+  context '#root?' do
+
+    it 'should be true for root node' do
+      expect(@root.root?).to be_truthy
     end
 
-    it '#leaf? should be false' do
-      expect(@root.leaf?).to be false
+    it 'should be false for children' do
+      expect(@child.root?).to be_falsey
     end
 
+  end
+
+  context '#leaf?' do
+
+    it 'should be false for root node' do
+      expect(@root.leaf?).to be_falsey
+    end
+
+    it 'should be true for children' do
+      expect(@root.leaves.first.leaf?).to be_truthy
+    end
+
+  end
+
+  context '#leaves' do
     it 'should have 6 leaves' do
       expect(@root.leaves.count).to eql(6)
     end
@@ -56,8 +89,11 @@ describe Node do
       expect(@child.parent).to eql(@root)
     end
 
-    it 'should have 1 ancestor which is root' do
+    it 'should have 1 ancestor' do
       expect(@child.ancestors.count).to eql(1)
+    end
+
+    it 'should have root as only ancestor' do
       expect(@child.ancestors.first).to eql(@root)
     end
 
@@ -87,7 +123,6 @@ describe Node do
         expect(Node.roots.first).to eql(@root)
       end
     end
-
 
   end
 end
