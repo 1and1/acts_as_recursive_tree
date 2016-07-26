@@ -107,7 +107,7 @@ module ActsAsRecursiveTree
     end
 
     def without_self(scope)
-      scope.without(self)
+      scope.without_record(self)
     end
 
     ##
