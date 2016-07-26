@@ -103,7 +103,7 @@ module ActsAsRecursiveTree
         join_condition << to.to_s
         join_condition << '"'
 
-        recursive_tree_config[:base_class].constantize.joins(join_condition)
+        recursive_tree_config[:base_class].constantize.joins(join_condition).unscope(:where)
       end
 
       ##
