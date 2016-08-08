@@ -4,11 +4,6 @@ module ActsAsRecursiveTree
   module Model
     extend ActiveSupport::Concern
 
-    included do
-      # hack to get the right classname
-      recursive_tree_config[:base_class] = class_name
-    end
-
     ##
     # Returns list of ancestors, starting from parent until root.
     #
@@ -17,7 +12,7 @@ module ActsAsRecursiveTree
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
     def ancestors(recursive_condition: nil)
-      base_class.ancestors_of(self, recursive_condition)
+      self.class.base_class.ancestors_of(self, recursive_condition)
     end
 
     # Returns ancestors and current node itself.
@@ -27,7 +22,7 @@ module ActsAsRecursiveTree
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
     def self_and_ancestors(recursive_condition: nil)
-      base_class.self_and_ancestors_of(self, recursive_condition)
+      self.class.base_class.self_and_ancestors_of(self, recursive_condition)
     end
 
     ##
@@ -38,7 +33,7 @@ module ActsAsRecursiveTree
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
     def descendants(recursive_condition: nil)
-      base_class.descendants_of(self, recursive_condition)
+      self.class.base_class.descendants_of(self, recursive_condition)
     end
 
     ##
@@ -49,7 +44,7 @@ module ActsAsRecursiveTree
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
     def self_and_descendants(recursive_condition: nil)
-      base_class.self_and_descendants_of(self, recursive_condition)
+      self.class.base_class.self_and_descendants_of(self, recursive_condition)
     end
 
     ##
@@ -71,7 +66,7 @@ module ActsAsRecursiveTree
     #
     # subchild1.self_and_siblings # => [subchild1, subchild2]
     def self_and_siblings
-      base_class.where(self.recursive_tree_config[:foreign_key] => self.attributes[self.recursive_tree_config[:foreign_key].to_s])
+      self.class.base_class.where(self.recursive_tree_config[:foreign_key] => self.attributes[self.recursive_tree_config[:foreign_key].to_s])
     end
 
     ##
@@ -79,14 +74,14 @@ module ActsAsRecursiveTree
     #
     # root.self_and_children # => [root, child1]
     def self_and_children
-      base_class.where("id = :id or #{self.recursive_tree_config[:foreign_key]} = :id", id: self.id)
+      self.class.base_class.where("id = :id or #{self.recursive_tree_config[:foreign_key]} = :id", id: self.id)
     end
 
     ##
     # Returns all Leaves
     #
     def leaves
-      base_class.leaves_of(self)
+      self.class.base_class.leaves_of(self)
     end
 
 
@@ -108,19 +103,6 @@ module ActsAsRecursiveTree
 
     def without_self(scope)
       scope.without_record(self)
-    end
-
-    ##
-    # Returns the Class object of the base class. This is needed for STI
-    #
-    def base_class
-      self.class.recursive_tree_config[:base_class].constantize
-    end
-
-    module ClassMethods
-      def class_name
-        ancestors.first.name
-      end
     end
   end
 end
