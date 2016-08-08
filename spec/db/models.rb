@@ -3,7 +3,7 @@ class Node < ActiveRecord::Base
   has_one :node_info
 end
 
-class NodeInfo< ActiveRecord::Base
+class NodeInfo < ActiveRecord::Base
   belongs_to :node
 end
 
