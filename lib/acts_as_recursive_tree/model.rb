@@ -101,8 +101,24 @@ module ActsAsRecursiveTree
       !children.any?
     end
 
+    ##
+    # Applies the without_record scope to the given relation
+    #
+    # @param scope [ActiveRecord::Relation]
+    # @return [ActiveRecord::Relation] new relation
     def without_self(scope)
       scope.without_record(self)
+    end
+
+    class_methods do
+      ##
+      # Returns a QueryBuilder instance for use in scopes.
+      #
+      # @return [ActsAsRecursiveTree::QueryBuilder]
+      #
+      def recursive_query_builder(ids = nil)
+        QueryBuilder.new(self, ids)
+      end
     end
   end
 end

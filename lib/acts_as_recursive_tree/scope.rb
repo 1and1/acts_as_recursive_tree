@@ -10,12 +10,13 @@ module ActsAsRecursiveTree
       }
 
       scope :self_and_ancestors_of, ->(record, condition = nil) {
-        where(related_recursive_items(
-                  record,
-                  descendants:    false,
-                  stop_condition: condition
-              )
-        )
+        builder = recursive_query_builder(record)
+        joins(
+            builder.recursive_sql_for_join(
+                type:            :ancestors,
+                query_condition: condition
+            )
+        ).order(builder.recursive_depth_column)
       }
 
       scope :ancestors_of, ->(record, condition = nil) {
@@ -23,11 +24,10 @@ module ActsAsRecursiveTree
       }
 
       scope :self_and_descendants_of, ->(record, condition = nil) {
-        where(related_recursive_items(
-                  record,
-                  descendants:    true,
-                  stop_condition: condition
-              )
+        joins(
+            recursive_query_builder(record).recursive_sql_for_join(
+                query_condition: condition
+            )
         )
       }
 
@@ -36,10 +36,10 @@ module ActsAsRecursiveTree
       }
 
       scope :leaves_of, ->(record) {
-        self_and_descendants_of(record).where.not(related_recursive_items(
-                                                      record,
-                                                      descendants: true,
-                                                      only_column: recursive_tree_config[:foreign_key])
+        self_and_descendants_of(record).where.not(
+            recursive_query_builder(record).recursive_sql_for_where(
+                only_column: recursive_tree_config[:foreign_key]
+            )
         )
       }
 
