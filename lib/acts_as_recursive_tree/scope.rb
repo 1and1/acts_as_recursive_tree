@@ -24,8 +24,8 @@ module ActsAsRecursiveTree
       }
 
       scope :self_and_descendants_of, ->(record, condition = nil) {
-        joins(
-            recursive_query_builder(record).recursive_sql_for_join(
+        where(
+            recursive_query_builder(record).recursive_sql_for_where(
                 query_condition: condition
             )
         )
