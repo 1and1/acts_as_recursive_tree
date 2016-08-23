@@ -88,7 +88,7 @@ module ActsAsRecursiveTree
     #
     def build_recursive_term_sql(type, query_condition, result_field = nil)
 
-      fields = result_field ? "#{quote(TRAVERS_LOC)}.#{quote(result_field)}" : '*'
+      fields = result_field ? "DISTINCT #{quote(TRAVERS_LOC)}.#{quote(result_field)}" : '*'
 
       parts = [
           "WITH RECURSIVE #{quote(TRAVERS_LOC)} AS (",
@@ -96,8 +96,10 @@ module ActsAsRecursiveTree
           'UNION',
           build_recursive_sql(type, query_condition),
           ')',
-          "SELECT #{fields}",
-          "FROM #{quote(TRAVERS_LOC)}"
+          'SELECT',
+          fields,
+          'FROM',
+          quote(TRAVERS_LOC)
       ]
 
       parts << "WHERE #{quote(TRAVERS_LOC)}.#{quote(result_field)} IS NOT NULL" if result_field
