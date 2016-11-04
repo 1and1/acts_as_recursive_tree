@@ -2,15 +2,11 @@ database_folder           = "#{File.dirname(__FILE__)}/../db"
 database_adapter          = 'sqlite'
 
 # Logger setup
-log                       = Logger.new('db.log')
-log.sev_threshold         = Logger::DEBUG
-ActiveRecord::Base.logger = log
+ActiveRecord::Base.logger = nil
 
-ActiveRecord::Migration.verbose      = false
-# ActiveRecord::Base.table_name_prefix = ENV['DB_PREFIX'].to_s
-# ActiveRecord::Base.table_name_suffix = ENV['DB_SUFFIX'].to_s
+ActiveRecord::Migration.verbose = false
 
-ActiveRecord::Base.configurations = YAML::load(ERB.new(IO.read("#{database_folder}/database.yml")).result)
+ActiveRecord::Base.configurations = YAML::load(File.read("#{database_folder}/database.yml"))
 
 config = ActiveRecord::Base.configurations[database_adapter]
 
@@ -19,8 +15,8 @@ FileUtils.rm config['database'], force: true
 
 ActiveRecord::Base.establish_connection(database_adapter.to_sym)
 ActiveRecord::Base.establish_connection(config)
-#Foreigner.load
 
+# require schemata and models
 require_relative 'schema'
 require_relative 'models'
 

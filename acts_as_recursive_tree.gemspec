@@ -14,13 +14,13 @@ Gem::Specification.new do |spec|
   spec.homepage    = 'https://git.1and1.org/zeus-developers/acts_as_recursive_tree'
   spec.license     = 'MIT'
 
-  spec.required_ruby_version = '>= 1.9.3'
+  spec.required_ruby_version = '>= 2.0.0'
   spec.files                 = `git ls-files -z`.split("\x0")
   spec.executables           = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files            = spec.files.grep(%r{^spec/})
   spec.require_paths         = ['lib']
 
-  spec.add_runtime_dependency 'rails', '> 3.2.0', '< 5.1.0'
+  spec.add_runtime_dependency 'activerecord', '>= 4.2.0', '< 6.0.0'
 
   spec.add_development_dependency 'bundler', '~> 1.7'
   spec.add_development_dependency 'rake', '~> 10.0'

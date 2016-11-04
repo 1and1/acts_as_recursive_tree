@@ -77,11 +77,6 @@ describe Node do
 
   end
 
-  context '#without_self' do
-    it 'should exclude record' do
-      expect(@root.without_self(@root.self_and_descendants)).to_not include(@root)
-    end
-  end
 
   context '#leaves' do
     it 'should have 6 leaves' do

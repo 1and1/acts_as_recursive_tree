@@ -11,8 +11,8 @@ module ActsAsRecursiveTree
     #
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
-    def ancestors(recursive_condition: nil)
-      self.class.base_class.ancestors_of(self, recursive_condition)
+    def ancestors(opts = {})
+      base_class.ancestors_of(self, opts)
     end
 
     # Returns ancestors and current node itself.
@@ -21,8 +21,8 @@ module ActsAsRecursiveTree
     #
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
-    def self_and_ancestors(recursive_condition: nil)
-      self.class.base_class.self_and_ancestors_of(self, recursive_condition)
+    def self_and_ancestors(opts = {})
+      base_class.self_and_ancestors_of(self, opts)
     end
 
     ##
@@ -32,8 +32,8 @@ module ActsAsRecursiveTree
     #
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
-    def descendants(recursive_condition: nil)
-      self.class.base_class.descendants_of(self, recursive_condition)
+    def descendants(opts = {})
+      base_class.descendants_of(self, opts)
     end
 
     ##
@@ -43,14 +43,14 @@ module ActsAsRecursiveTree
     #
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
-    def self_and_descendants(recursive_condition: nil)
-      self.class.base_class.self_and_descendants_of(self, recursive_condition)
+    def self_and_descendants(opts = {})
+      base_class.self_and_descendants_of(self, opts)
     end
 
     ##
     # Returns the root node of the tree.
     def root
-      self_and_ancestors.where(self.recursive_tree_config[:foreign_key] => nil).first
+      self_and_ancestors.where(self._recursive_tree_config.parent_key => nil).first
     end
 
     ##
@@ -58,15 +58,7 @@ module ActsAsRecursiveTree
     #
     # subchild1.siblings # => [subchild2]
     def siblings
-      without_self(self_and_siblings)
-    end
-
-    ##
-    # Returns all siblings and a reference to the current node.
-    #
-    # subchild1.self_and_siblings # => [subchild1, subchild2]
-    def self_and_siblings
-      self.class.base_class.where(self.recursive_tree_config[:foreign_key] => self.attributes[self.recursive_tree_config[:foreign_key].to_s])
+      self_and_siblings.where.not(id: self.id)
     end
 
     ##
@@ -74,14 +66,21 @@ module ActsAsRecursiveTree
     #
     # root.self_and_children # => [root, child1]
     def self_and_children
-      self.class.base_class.where("id = :id or #{self.recursive_tree_config[:foreign_key]} = :id", id: self.id)
+      table = self.class.arel_table
+      id    = self.attributes[self._recursive_tree_config.primary_key.to_s]
+
+      base_class.where(
+          table[self._recursive_tree_config.primary_key].eq(id).or(
+              table[self._recursive_tree_config.parent_key].eq(id)
+          )
+      )
     end
 
     ##
     # Returns all Leaves
     #
     def leaves
-      self.class.base_class.leaves_of(self)
+      base_class.leaves_of(self)
     end
 
 
@@ -90,7 +89,7 @@ module ActsAsRecursiveTree
     # subchild1.root? # => false
     # root.root? # => true
     def root?
-      parent.blank?
+      self.attributes[self._recursive_tree_config.parent_key.to_s].blank?
     end
 
     # Returns true if node has no children, false otherwise
@@ -101,23 +100,19 @@ module ActsAsRecursiveTree
       !children.any?
     end
 
-    ##
-    # Applies the without_record scope to the given relation
-    #
-    # @param scope [ActiveRecord::Relation]
-    # @return [ActiveRecord::Relation] new relation
-    def without_self(scope)
-      scope.without_record(self)
+    def base_class
+      self.class.base_class
     end
+    private :base_class
 
     class_methods do
       ##
-      # Returns a QueryBuilder instance for use in scopes.
+      # Returns a Relation instance for use in scopes.
       #
-      # @return [ActsAsRecursiveTree::QueryBuilder]
+      # @return [ActiveRecord::Relation]
       #
-      def recursive_query_builder(ids = nil)
-        QueryBuilder.new(self, ids)
+      def _create_recursive_relation(ids, opts ={})
+        RelationBuilder.create_relation(self, ids, opts)
       end
     end
   end

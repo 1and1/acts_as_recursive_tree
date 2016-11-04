@@ -7,3 +7,9 @@ begin
 rescue LoadError
 end
 
+desc 'Deletes temporary files'
+task :clean_tmp_files do
+  %w( db.log test.sqlite3 ).each do |file|
+    File.delete(file) if File.exists?(file)
+  end
+end

@@ -1,17 +1,14 @@
 require 'active_support'
-
+require_relative 'acts_as_recursive_tree/railtie' if defined?(Rails)
 
 module ActsAsRecursiveTree
   extend ActiveSupport::Autoload
 
   autoload :ActsMacro
   autoload :Model
-  autoload :Relation
-  autoload :Scope
+  autoload :Associations
+  autoload :Scopes
   autoload :Version
-  autoload :QueryBuilder
-
-  ActiveSupport.on_load :active_record do
-    ActiveRecord::Base.send :extend, ActsAsRecursiveTree::ActsMacro
-  end
+  autoload :RelationBuilder
+  autoload :Builder
 end

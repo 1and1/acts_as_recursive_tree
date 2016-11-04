@@ -1,3 +1,7 @@
+ActiveRecord::Base.class_exec do
+  extend ActsAsRecursiveTree::ActsMacro
+end
+
 class Node < ActiveRecord::Base
   acts_as_tree
   has_one :node_info
