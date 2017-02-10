@@ -1,12 +1,11 @@
 module ActsAsRecursiveTree
   class RelationBuilder
 
-    attr_reader :klass, :base_class, :ids, :base_table, :recursive_temp_table, :travers_loc_table, :config
+    attr_reader :base_class, :ids, :base_table, :recursive_temp_table, :travers_loc_table, :config
     attr_reader :recursion_type, :query_condition, :only_leaves, :without_ids, :ordering
     mattr_reader(:random) { Random.new }
 
     def initialize(klass, ids, opts = {})
-      @klass      = klass
       @base_class = klass.base_class
       @config     = base_class._recursive_tree_config
       @ids        = Builder::Ids.create(ids, config)
@@ -41,11 +40,11 @@ module ActsAsRecursiveTree
           base_table[config.primary_key].eq(recursive_temp_table[config.primary_key])
       )
 
-
       relation = base_class.joins(final_select_mgr.join_sources)
 
       relation = relation.where(ids.apply_negated_to(base_table[config.primary_key])) if without_ids
 
+      relation = relation.order("#{recursive_temp_table.name}.#{config.depth_column.to_s} ASC") if ordering
       relation
     end
 
