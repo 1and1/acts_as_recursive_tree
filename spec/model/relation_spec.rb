@@ -25,14 +25,14 @@ describe 'Relation' do
   context 'descendants' do
 
     it 'works with simple relation' do
-      desc = @root.descendants(condition: Node.where(active: true))
+      desc = @root.descendants(->(opts) { opts.condition = Node.where(active: true) })
       desc.all.each do |node|
         expect(node.active).to be_truthy
       end
     end
 
     it 'works with joins relation' do
-      desc = @root.descendants(condition: Node.joins(:node_info).where.not(node_infos: { status: 'bar' }))
+      desc = @root.descendants(->(opts) { opts.condition = Node.joins(:node_info).where.not(node_infos: { status: 'bar' }) })
       desc.all.each do |node|
         expect(node.node_info.status).to eql('foo')
       end
@@ -42,7 +42,11 @@ describe 'Relation' do
   context 'ancestors' do
 
     it 'works with simple relation' do
-      ancestors = @root.leaves.first.ancestors(condition: Node.where(active: false)).all.to_a
+      ancestors = @root.leaves.first.ancestors(
+          lambda do |opts|
+            opts.condition = Node.where(active: false)
+          end
+      ).all.to_a
 
       ancestors.each do |node|
         expect(node.active).to be_falsey
@@ -52,7 +56,7 @@ describe 'Relation' do
     end
 
     it 'works with joins relation' do
-      ancestors = @root.leaves.first.ancestors(condition: Node.joins(:node_info).where.not(node_infos: { status: 'foo' }))
+      ancestors = @root.leaves.first.ancestors(->(opts) { opts.condition = Node.joins(:node_info).where.not(node_infos: { status: 'foo' }) })
       ancestors.all.each do |node|
         expect(node.node_info.status).to eql('bar')
       end

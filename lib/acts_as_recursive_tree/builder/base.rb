@@ -3,27 +3,22 @@ module ActsAsRecursiveTree
     class Base
 
       attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table
-      attr_reader :query_condition, :without_ids
+      attr_reader :query_opts, :without_ids
       mattr_reader(:random) { Random.new }
 
-      def initialize(klass, ids, opts = {})
-        @klass      = klass
-        @ids        = Builder::Ids.create(ids, config)
+      def initialize(klass, ids, exclude_ids: false, proc: nil)
+        @klass       = klass
+        @ids         = Builder::Values.create(ids, config)
+        @without_ids = exclude_ids
+
+        @query_opts = QueryOptions.new
+
+        proc.call(@query_opts) if proc
 
         rand_int              = random.rand(1_000_000)
         @recursive_temp_table = Arel::Table.new("recursive_#{klass.table_name}_#{rand_int}_temp")
         @travers_loc_table    = Arel::Table.new("traverse_#{rand_int}_loc")
-
-        set_opts(opts)
       end
-
-      def set_opts(condition: nil, exclude_ids: false)
-
-        @query_condition = condition
-        @without_ids     = exclude_ids
-      end
-
-      private :set_opts
 
       def base_table
         klass.arel_table
@@ -42,9 +37,21 @@ module ActsAsRecursiveTree
 
         relation = klass.joins(final_select_mgr.join_sources)
 
-        relation = relation.where(ids.apply_negated_to(base_table[config.primary_key])) if without_ids
+        relation = apply_except_id(relation)
+        relation = apply_depth(relation)
 
         relation
+      end
+
+      def apply_except_id(relation)
+        return relation unless without_ids
+        relation.where(ids.apply_negated_to(base_table[config.primary_key]))
+      end
+
+      def apply_depth(relation)
+        return relation unless query_opts.depth.is_set?
+
+        relation.where(query_opts.depth.apply_to(recursive_temp_table[config.depth_column]))
       end
 
       def create_select_manger
@@ -84,7 +91,7 @@ module ActsAsRecursiveTree
             ).as(config.depth_column.to_s)
         ).unscope(where: :type).joins(select_manager.join_sources)
 
-        relation       = relation.merge(query_condition) if query_condition
+        relation       = relation.merge(query_opts.condition) if query_opts.condition
         relation.arel
       end
 

@@ -1,6 +1,6 @@
 module ActsAsRecursiveTree
   module Builder
-    module Ids
+    module Values
       class Base
         attr_reader :value, :config
 
@@ -56,7 +56,7 @@ module ActsAsRecursiveTree
         end
       end
 
-      def self.create(value, config)
+      def self.create(value, config=nil)
         klass = case value
         when ::Numeric, ::String
           SingleValue

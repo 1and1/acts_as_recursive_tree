@@ -5,43 +5,38 @@ module ActsAsRecursiveTree
     included do
       scope :roots, -> { where(_recursive_tree_config.parent_key => nil) }
 
-      scope :self_and_ancestors_of, ->(ids, opts = {}) {
+      scope :self_and_ancestors_of, ->(ids, proc = nil) {
         Builder::Ancestors.new(
             self,
             ids,
-            opts.merge(
-                exclude_ids: false
-            )
+            proc: proc
         ).build
       }
 
-      scope :ancestors_of, ->(ids, opts = {}) {
+      scope :ancestors_of, ->(ids, proc = nil) {
         Builder::Ancestors.new(
             self,
             ids,
-            opts.merge(
-                exclude_ids: true
-            )
+            exclude_ids: true,
+            proc:        proc
+
         ).build
       }
 
-      scope :self_and_descendants_of, ->(ids, opts = {}) {
+      scope :self_and_descendants_of, ->(ids, proc = nil) {
         Builder::Descendants.new(
             self,
             ids,
-            opts.merge(
-                exclude_ids: false
-            )
+            proc: proc
         ).build
       }
 
-      scope :descendants_of, ->(ids, opts = {}) {
+      scope :descendants_of, ->(ids, proc = nil) {
         Builder::Descendants.new(
             self,
             ids,
-            opts.merge(
-                exclude_ids: true
-            )
+            exclude_ids: true,
+            proc:        proc
         ).build
       }
 

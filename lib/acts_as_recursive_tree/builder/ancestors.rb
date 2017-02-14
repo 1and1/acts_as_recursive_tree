@@ -7,7 +7,7 @@ module ActsAsRecursiveTree
       end
 
       def build
-        super.order("#{recursive_temp_table.name}.#{config.depth_column.to_s} ASC")
+        super.order(recursive_temp_table[config.depth_column].asc)
       end
 
     end

@@ -11,8 +11,8 @@ module ActsAsRecursiveTree
     #
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
-    def ancestors(opts = {})
-      base_class.ancestors_of(self, opts)
+    def ancestors(proc = nil)
+      base_class.ancestors_of(self, proc)
     end
 
     # Returns ancestors and current node itself.
@@ -21,8 +21,8 @@ module ActsAsRecursiveTree
     #
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
-    def self_and_ancestors(opts = {})
-      base_class.self_and_ancestors_of(self, opts)
+    def self_and_ancestors(proc = nil)
+      base_class.self_and_ancestors_of(self, proc)
     end
 
     ##
@@ -32,8 +32,8 @@ module ActsAsRecursiveTree
     #
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
-    def descendants(opts = {})
-      base_class.descendants_of(self, opts)
+    def descendants(proc = nil)
+      base_class.descendants_of(self, proc)
     end
 
     ##
@@ -43,8 +43,8 @@ module ActsAsRecursiveTree
     #
     # @param :recursive_condition [ActiveRecord::Relation]
     #         The recursion will stop when the condition is no longer met
-    def self_and_descendants(opts = {})
-      base_class.self_and_descendants_of(self, opts)
+    def self_and_descendants(proc = nil)
+      base_class.self_and_descendants_of(self, proc)
     end
 
     ##
@@ -103,6 +103,7 @@ module ActsAsRecursiveTree
     def base_class
       self.class.base_class
     end
+
     private :base_class
 
   end
