@@ -2,7 +2,10 @@ module ActsAsRecursiveTree
   module Builder
     extend ActiveSupport::Autoload
 
-    autoload :RecursionDirection
     autoload :Ids
+    autoload :Base
+    autoload :Descendants
+    autoload :Ancestors
+    autoload :Leaves
   end
 end

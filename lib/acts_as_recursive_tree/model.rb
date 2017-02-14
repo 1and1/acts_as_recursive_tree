@@ -105,15 +105,5 @@ module ActsAsRecursiveTree
     end
     private :base_class
 
-    class_methods do
-      ##
-      # Returns a Relation instance for use in scopes.
-      #
-      # @return [ActiveRecord::Relation]
-      #
-      def _create_recursive_relation(ids, opts ={})
-        RelationBuilder.create_relation(self, ids, opts)
-      end
-    end
   end
 end

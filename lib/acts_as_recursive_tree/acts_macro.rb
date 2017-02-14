@@ -13,7 +13,7 @@ module ActsAsRecursiveTree
       class_attribute :_recursive_tree_config
       self._recursive_tree_config = OpenStruct.new(
           primary_key:  self.primary_key.to_sym,
-          parent_key:   parent_key,
+          parent_key:   parent_key.to_sym,
           depth_column: :recursive_depth
       )
       include ActsAsRecursiveTree::Model

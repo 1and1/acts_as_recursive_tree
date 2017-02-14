@@ -6,50 +6,50 @@ module ActsAsRecursiveTree
       scope :roots, -> { where(_recursive_tree_config.parent_key => nil) }
 
       scope :self_and_ancestors_of, ->(ids, opts = {}) {
-        _create_recursive_relation(
-            ids,
-            opts.merge(
-                recursion_type: :ancestors,
-                exclude_ids:    false,
-                ordering:       true
-            )
-        )
-      }
-
-      scope :ancestors_of, ->(ids, opts = {}) {
-        _create_recursive_relation(
-            ids,
-            opts.merge(
-                recursion_type: :ancestors,
-                exclude_ids:    true,
-                ordering:       true
-            )
-        )
-      }
-
-      scope :self_and_descendants_of, ->(ids, opts = {}) {
-        _create_recursive_relation(
+        Builder::Ancestors.new(
+            self,
             ids,
             opts.merge(
                 exclude_ids: false
             )
-        )
+        ).build
       }
 
-      scope :descendants_of, ->(ids, opts = {}) {
-        _create_recursive_relation(
+      scope :ancestors_of, ->(ids, opts = {}) {
+        Builder::Ancestors.new(
+            self,
             ids,
             opts.merge(
                 exclude_ids: true
             )
-        )
+        ).build
+      }
+
+      scope :self_and_descendants_of, ->(ids, opts = {}) {
+        Builder::Descendants.new(
+            self,
+            ids,
+            opts.merge(
+                exclude_ids: false
+            )
+        ).build
+      }
+
+      scope :descendants_of, ->(ids, opts = {}) {
+        Builder::Descendants.new(
+            self,
+            ids,
+            opts.merge(
+                exclude_ids: true
+            )
+        ).build
       }
 
       scope :leaves_of, ->(ids) {
-        _create_recursive_relation(
-            ids,
-            only_leaves: true
-        )
+        Builder::Leaves.new(
+            self,
+            ids
+        ).build
       }
 
     end
