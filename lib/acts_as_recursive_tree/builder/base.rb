@@ -8,7 +8,7 @@ module ActsAsRecursiveTree
 
       def initialize(klass, ids, exclude_ids: false, proc: nil)
         @klass       = klass
-        @ids         = Builder::Values.create(ids, config)
+        @ids         = Values.create(ids, config)
         @without_ids = exclude_ids
 
         @query_opts = QueryOptions.new
@@ -49,7 +49,7 @@ module ActsAsRecursiveTree
       end
 
       def apply_depth(relation)
-        return relation unless query_opts.depth.is_set?
+        return relation unless query_opts.depth_present?
 
         relation.where(query_opts.depth.apply_to(recursive_temp_table[config.depth_column]))
       end
@@ -91,18 +91,12 @@ module ActsAsRecursiveTree
             ).as(config.depth_column.to_s)
         ).unscope(where: :type).joins(select_manager.join_sources)
 
-        relation       = relation.merge(query_opts.condition) if query_opts.condition
+        relation       = relation.merge(query_opts.condition) if query_opts.condition.present?
         relation.arel
       end
 
       def build_join_condition
         raise 'not implemented'
-      end
-
-      def self.create_relation(klass, ids, opts = {})
-        builder = self.new(klass, ids, opts)
-
-        builder.build
       end
 
     end

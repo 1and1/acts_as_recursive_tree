@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary     = %q{Drop in replacement for acts_as_tree but using recursive queries}
   spec.description = %q{
   This is a ruby gem that provides drop in replacement for acts_as_tree but makes use of SQL recursive statement. Be sure to have a DBMS that supports recursive queries when using this gem (e.g. PostgreSQL or SQLite). }
-  spec.homepage    = 'https://git.1and1.org/zeus-developers/acts_as_recursive_tree'
+  spec.homepage    = 'https://github.com/1and1/acts_as_recursive_tree'
   spec.license     = 'MIT'
 
   spec.required_ruby_version = '>= 2.0.0'

@@ -1,6 +1,6 @@
 # ActsAsRecursiveTree
 
-TODO: Write a gem description
+Use the power of recursive SQL statements in your Rails application.
 
 ## Installation
 
@@ -24,7 +24,7 @@ TODO: Write usage instructions here
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/acts_as_recursive_tree/fork )
+1. Fork it ( https://github.com/1and1/acts_as_recursive_tree/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

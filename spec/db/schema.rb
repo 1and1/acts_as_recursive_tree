@@ -15,6 +15,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string :status
   end
 
+  create_table :node_with_other_parent_keys do |t|
+    t.integer :other_id
+  end
+
   create_table :locations do |t|
     t.integer :parent_id
     t.string :name

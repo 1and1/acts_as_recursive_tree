@@ -1,18 +1,6 @@
 module ActsAsRecursiveTree
   module Builder
     class QueryOptions
-      attr_accessor :condition
-      attr_reader :depth
-
-      def initialize
-        @depth = Depth.new
-      end
-
-      def depth=(value)
-        @depth = Depth.new(value)
-      end
-
-
       class Depth
         attr_reader :value, :operation
 
@@ -43,11 +31,6 @@ module ActsAsRecursiveTree
           @operation = :gteq
         end
 
-
-        def is_set?
-          value && operation
-        end
-
         def apply_to(attribute)
           if value.is_a?(Values::Base)
             value.apply_to(attribute)
@@ -57,6 +40,19 @@ module ActsAsRecursiveTree
         end
       end
 
+      attr_accessor :condition
+
+      def depth=(value)
+        @depth = Depth.new(value)
+      end
+
+      def depth
+        @depth ||= Depth.new
+      end
+
+      def depth_present?
+        @depth.present?
+      end
     end
   end
 end

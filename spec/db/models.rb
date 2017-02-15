@@ -11,6 +11,10 @@ class NodeInfo < ActiveRecord::Base
   belongs_to :node
 end
 
+class NodeWithOtherParentKey < ActiveRecord::Base
+  acts_as_tree parent_key: :other_id
+end
+
 class Location < ActiveRecord::Base
   acts_as_tree
 end
