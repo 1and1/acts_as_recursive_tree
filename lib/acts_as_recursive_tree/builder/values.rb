@@ -60,12 +60,14 @@ module ActsAsRecursiveTree
         klass = case value
         when ::Numeric, ::String
           SingleValue
+        when ::ActiveRecord::Relation
+          Relation
         when Enumerable
           MultiValue
         when ::ActiveRecord::Base
           ActiveRecord
-        when ::ActiveRecord::Relation
-          Relation
+        else
+          raise InvalidArgument, "#{value.class} is not supported"
         end
 
         klass.new(value, config)
