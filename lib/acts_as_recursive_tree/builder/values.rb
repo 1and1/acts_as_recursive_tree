@@ -67,7 +67,7 @@ module ActsAsRecursiveTree
         when ::ActiveRecord::Base
           ActiveRecord
         else
-          raise InvalidArgument, "#{value.class} is not supported"
+          raise "#{value.class} is not supported"
         end
 
         klass.new(value, config)

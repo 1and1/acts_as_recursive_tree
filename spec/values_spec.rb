@@ -18,6 +18,12 @@ describe ActsAsRecursiveTree::Builder::Values do
   let(:table) { Arel::Table.new('test_table') }
   let(:attribute) { table['test_attr'] }
 
+  context 'invalid agurment' do
+    it 'should raise exception' do
+      expect{described_class.create(nil)}.to raise_exception /is not supported/
+    end
+  end
+
   context 'single value' do
     let(:single_value) { 3 }
 
