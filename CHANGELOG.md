@@ -1,3 +1,7 @@
+### Version 1.1.1
+- BUGFIX: not checking presence of relation with _present?_  method - this causes execution of the relation
+- added missing != method for depth
+
 ### Version 1.1.0
 - scopes and method can now be passed a Proc instance for additional modifications of the query
 - new option to specify the depth to query

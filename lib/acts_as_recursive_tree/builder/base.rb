@@ -91,7 +91,7 @@ module ActsAsRecursiveTree
             ).as(config.depth_column.to_s)
         ).unscope(where: :type).joins(select_manager.join_sources)
 
-        relation       = relation.merge(query_opts.condition) if query_opts.condition.present?
+        relation       = relation.merge(query_opts.condition) unless query_opts.condition.nil?
         relation.arel
       end
 

@@ -7,8 +7,13 @@ module ActsAsRecursiveTree
         def initialize(value=nil)
           if value
             @value     = Values::create(value)
-            @operation = :lt
+            @operation = true
           end
+        end
+
+        def !=(value)
+          @value     = Values::create(value)
+          @operation = false
         end
 
         def <(value)
@@ -33,7 +38,11 @@ module ActsAsRecursiveTree
 
         def apply_to(attribute)
           if value.is_a?(Values::Base)
+            if operation
             value.apply_to(attribute)
+            else
+              value.apply_negated_to(attribute)
+            end
           else
             attribute.send(operation, value)
           end
