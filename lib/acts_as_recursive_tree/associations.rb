@@ -8,7 +8,8 @@ module ActsAsRecursiveTree
       belongs_to :parent,
                  class_name:  self.base_class.to_s,
                  foreign_key: self._recursive_tree_config.parent_key,
-                 inverse_of:  :children
+                 inverse_of:  :children,
+                 optional:    true
 
       has_many :children,
                class_name:  self.base_class.to_s,
