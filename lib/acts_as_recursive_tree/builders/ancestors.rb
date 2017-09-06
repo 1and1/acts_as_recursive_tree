@@ -1,13 +1,15 @@
 module ActsAsRecursiveTree
-  module Builder
-    class Ancestors < Base
+  module Builders
+    class Ancestors < RelationBuilder
 
       def build_join_condition
         travers_loc_table[config.parent_key].eq(base_table[config.primary_key])
       end
 
-      def build
-        super.order(recursive_temp_table[config.depth_column].asc)
+      def get_query_options(proc)
+        opts                 = super
+        opts.ensure_ordering = true
+        opts
       end
 
     end

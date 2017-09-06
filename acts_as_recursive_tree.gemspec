@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.test_files            = spec.files.grep(%r{^spec/})
   spec.require_paths         = ['lib']
 
-  spec.add_runtime_dependency 'activerecord', '>= 4.2.0', '< 6.0.0'
+  spec.add_runtime_dependency 'activerecord', '>= 5.0.0', '< 6.0.0'
 
   spec.add_development_dependency 'bundler', '~> 1.7'
   spec.add_development_dependency 'rake', '~> 10.0'

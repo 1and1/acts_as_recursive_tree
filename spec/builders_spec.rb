@@ -49,17 +49,17 @@ shared_examples 'descendant query' do
   it { is_expected.to match /"#{model_class.table_name}"."#{model_class._recursive_tree_config.parent_key}" = "#{builder.travers_loc_table.name}"."#{model_class.primary_key}"/ }
 end
 
-describe ActsAsRecursiveTree::Builder::Descendants do
+describe ActsAsRecursiveTree::Builders::Descendants do
   it_behaves_like 'build recursive query'
   it_behaves_like 'descendant query'
 end
 
-describe ActsAsRecursiveTree::Builder::Ancestors do
+describe ActsAsRecursiveTree::Builders::Ancestors do
   it_behaves_like 'build recursive query'
   it_behaves_like 'ancestor query'
 end
 
-describe ActsAsRecursiveTree::Builder::Leaves do
+describe ActsAsRecursiveTree::Builders::Leaves do
   it_behaves_like 'build recursive query'
   it_behaves_like 'descendant query'
 end

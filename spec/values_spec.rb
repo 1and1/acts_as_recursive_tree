@@ -3,7 +3,7 @@ require 'spec_helper'
 shared_examples 'single values' do
   subject(:value) { described_class.create(single_value) }
 
-  it { is_expected.to be_a ActsAsRecursiveTree::Builder::Values::SingleValue }
+  it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::SingleValue }
 
   it 'should apply_to' do
     expect(value.apply_to(attribute).to_sql).to end_with " = #{single_value}"
@@ -14,7 +14,7 @@ shared_examples 'single values' do
   end
 end
 
-describe ActsAsRecursiveTree::Builder::Values do
+describe ActsAsRecursiveTree::Options::Values do
   let(:table) { Arel::Table.new('test_table') }
   let(:attribute) { table['test_attr'] }
 
@@ -42,7 +42,7 @@ describe ActsAsRecursiveTree::Builder::Values do
       let(:array) { [1, 2, 3] }
       subject(:value) { described_class.create(array) }
 
-      it { is_expected.to be_a ActsAsRecursiveTree::Builder::Values::MultiValue }
+      it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::MultiValue }
 
       it 'should apply_to' do
         expect(value.apply_to(attribute).to_sql).to end_with " IN (#{array.join(', ')})"
@@ -57,7 +57,7 @@ describe ActsAsRecursiveTree::Builder::Values do
       let(:range) { 1..3 }
       subject(:value) { described_class.create(range) }
 
-      it { is_expected.to be_a ActsAsRecursiveTree::Builder::Values::MultiValue }
+      it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::MultiValue }
 
       it 'should apply_to' do
         expect(value.apply_to(attribute).to_sql).to end_with "BETWEEN #{range.begin} AND #{range.end}"
@@ -72,7 +72,7 @@ describe ActsAsRecursiveTree::Builder::Values do
       let(:relation) { Node.where(name: 'test') }
       subject(:value) { described_class.create(relation, OpenStruct.new(primary_key: :id)) }
 
-      it { is_expected.to be_a ActsAsRecursiveTree::Builder::Values::Relation }
+      it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::Relation }
 
       it 'should apply_to' do
         expect(value.apply_to(attribute).to_sql).to match /IN \(SELECT.*\)/

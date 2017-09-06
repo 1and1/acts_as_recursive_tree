@@ -1,12 +1,9 @@
 module ActsAsRecursiveTree
-  module Builder
+  module Options
     extend ActiveSupport::Autoload
 
     autoload :Values
+    autoload :DepthCondition
     autoload :QueryOptions
-    autoload :Base
-    autoload :Descendants
-    autoload :Ancestors
-    autoload :Leaves
   end
 end

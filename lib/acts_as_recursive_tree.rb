@@ -9,5 +9,6 @@ module ActsAsRecursiveTree
   autoload :Associations
   autoload :Scopes
   autoload :Version
-  autoload :Builder
+  autoload :Options
+  autoload :Builders
 end

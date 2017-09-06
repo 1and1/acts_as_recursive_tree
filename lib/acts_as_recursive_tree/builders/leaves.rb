@@ -1,5 +1,5 @@
 module ActsAsRecursiveTree
-  module Builder
+  module Builders
     class Leaves < Descendants
 
       def create_select_manger
