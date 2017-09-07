@@ -16,6 +16,11 @@ module ActsAsRecursiveTree
 
       end
 
+      def get_query_options(proc)
+        # do not allow any custom options
+        ActsAsRecursiveTree::Options::QueryOptions.new
+      end
+
     end
   end
 end

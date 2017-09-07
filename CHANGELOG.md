@@ -1,3 +1,7 @@
+### Version 2.0.0
+- drop support for rails < 5.0
+- support for polymorphic parent relations
+
 ### Version 1.1.1
 - BUGFIX: not checking presence of relation with _present?_  method - this causes execution of the relation
 - added missing != method for depth

@@ -19,6 +19,11 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer :other_id
   end
 
+  create_table :node_with_polymorphic_parents do |t|
+    t.integer :other_id
+    t.string :other_type
+  end
+
   create_table :locations do |t|
     t.integer :parent_id
     t.string :name
