@@ -1,5 +1,3 @@
-require 'active_support/concern'
-
 module ActsAsRecursiveTree
   module Model
     extend ActiveSupport::Concern
@@ -9,20 +7,16 @@ module ActsAsRecursiveTree
     #
     # subchild1.ancestors # => [child1, root]
     #
-    # @param :recursive_condition [ActiveRecord::Relation]
-    #         The recursion will stop when the condition is no longer met
-    def ancestors(proc = nil)
-      base_class.ancestors_of(self, proc)
+    def ancestors(&block)
+      base_class.ancestors_of(self, &block)
     end
 
     # Returns ancestors and current node itself.
     #
     # subchild1.self_and_ancestors # => [subchild1, child1, root]
     #
-    # @param :recursive_condition [ActiveRecord::Relation]
-    #         The recursion will stop when the condition is no longer met
-    def self_and_ancestors(proc = nil)
-      base_class.self_and_ancestors_of(self, proc)
+    def self_and_ancestors(&block)
+      base_class.self_and_ancestors_of(self, &block)
     end
 
     ##
@@ -30,10 +24,8 @@ module ActsAsRecursiveTree
     #
     # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
     #
-    # @param :recursive_condition [ActiveRecord::Relation]
-    #         The recursion will stop when the condition is no longer met
-    def descendants(proc = nil)
-      base_class.descendants_of(self, proc)
+    def descendants(&block)
+      base_class.descendants_of(self, &block)
     end
 
     ##
@@ -41,10 +33,8 @@ module ActsAsRecursiveTree
     #
     # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
     #
-    # @param :recursive_condition [ActiveRecord::Relation]
-    #         The recursion will stop when the condition is no longer met
-    def self_and_descendants(proc = nil)
-      base_class.self_and_descendants_of(self, proc)
+    def self_and_descendants(&block)
+      base_class.self_and_descendants_of(self, &block)
     end
 
     ##
@@ -70,9 +60,9 @@ module ActsAsRecursiveTree
       id    = self.attributes[self._recursive_tree_config.primary_key.to_s]
 
       base_class.where(
-          table[self._recursive_tree_config.primary_key].eq(id).or(
-              table[self._recursive_tree_config.parent_key].eq(id)
-          )
+        table[self._recursive_tree_config.primary_key].eq(id).or(
+          table[self._recursive_tree_config.parent_key].eq(id)
+        )
       )
     end
 
@@ -106,5 +96,30 @@ module ActsAsRecursiveTree
 
     private :base_class
 
+    module ClassMethods
+      def self_and_ancestors_of(ids, &block)
+        Builders::Ancestors.build(self, ids, &block)
+      end
+
+      def ancestors_of(ids, &block)
+        Builders::Ancestors.build(self, ids, exclude_ids: true, &block)
+      end
+
+      def roots_of(ids)
+        self_and_ancestors_of(ids).roots
+      end
+
+      def self_and_descendants_of(ids, &block)
+        Builders::Descendants.build(self, ids, &block)
+      end
+
+      def descendants_of(ids, &block)
+        Builders::Descendants.build(self, ids, exclude_ids: true, &block)
+      end
+
+      def leaves_of(ids, &block)
+        Builders::Leaves.build(self, ids, &block)
+      end
+    end
   end
 end

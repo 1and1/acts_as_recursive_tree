@@ -2,16 +2,20 @@ module ActsAsRecursiveTree
   module Builders
     class RelationBuilder
 
+      def self.build(klass, ids, exclude_ids: false, &block)
+        new(klass, ids, exclude_ids: exclude_ids, &block).build
+      end
+
       attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table
       attr_reader :query_opts, :without_ids
       mattr_reader(:random) { Random.new }
 
-      def initialize(klass, ids, exclude_ids: false, proc: nil)
+      def initialize(klass, ids, exclude_ids: false, &block)
         @klass       = klass
         @ids         = ActsAsRecursiveTree::Options::Values.create(ids, config)
         @without_ids = exclude_ids
 
-        @query_opts = get_query_options(proc)
+        @query_opts = get_query_options(block)
 
         rand_int              = random.rand(1_000_000)
         @recursive_temp_table = Arel::Table.new("recursive_#{klass.table_name}_#{rand_int}_temp")

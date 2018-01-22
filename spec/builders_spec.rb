@@ -3,7 +3,7 @@ require 'spec_helper'
 shared_context 'setup with enforced ordering' do
   let(:ordering) { false }
   include_context 'base_setup' do
-    let(:proc) { -> (config) { config.ensure_ordering = ordering } }
+    let(:proc) { -> (config) { config.ensure_ordering! } }
   end
 end
 
@@ -13,7 +13,7 @@ shared_context 'base_setup' do
   let(:exclude_ids) { false }
   let(:proc) { nil }
   let(:builder) do
-    described_class.new(model_class, model_id, exclude_ids: exclude_ids, proc: proc)
+    described_class.new(model_class, model_id, exclude_ids: exclude_ids, &proc)
   end
   subject(:query) { builder.build.to_sql }
 end
