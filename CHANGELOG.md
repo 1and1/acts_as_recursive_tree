@@ -1,3 +1,6 @@
+### Version 2.0.1
+- fix for parent_type_column applied not properly
+
 ### Version 2.0.0
 - drop support for rails < 5.0
 - support for polymorphic parent relations
