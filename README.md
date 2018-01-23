@@ -164,7 +164,44 @@ node_instance.descendants{ |opts| opts.ensure_ordering! }
 
 NOTE: if there are many descendants this may cause a severe increase in execution time! 
 
+## Single Table Inheritance (STI)
+
+STI works out of the box. Consider following classes: 
+
+```ruby
+class Node  < ActiveRecord::Base
+  recursive_tree
+end
+
+class SubNode  < Node
   
+end
+```
+
+When calling ClassMethods the results depend on the class on which you call the method:
+
+```ruby
+Node.descendants_of(123) # => returns Node and SubNode instances
+SubNode.descendants_of(123) # => returns SubNode instances only
+```
+
+Instance Methods make no difference of the class from which they are called:
+
+```ruby
+sub_node_instance.descendants # => returns Node and SubNode instances
+```
+
+
+## Known Issues
+
+When using PostgreSQL as underlying database system chances are good that you encounter following error message:
+
+`
+ActiveRecord::StatementInvalid: PG::ProtocolViolation: ERROR:  bind message supplies 1 parameters, but prepared statement "" requires 2
+`
+
+This is a known ActiveRecord issue which should be fixed in Rails 5.2. Alternative 
+
 
 ## Contributing
 
