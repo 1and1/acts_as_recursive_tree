@@ -6,10 +6,10 @@ module ActsAsRecursiveTree
         select_manager = super
 
         select_manager.where(
-            travers_loc_table[config.primary_key].not_in(
+            travers_loc_table[primary_key].not_in(
                 travers_loc_table.where(
-                    travers_loc_table[config.parent_key].not_eq(nil)
-                ).project(travers_loc_table[config.parent_key])
+                    travers_loc_table[parent_key].not_eq(nil)
+                ).project(travers_loc_table[parent_key])
             )
         )
         select_manager

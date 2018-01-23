@@ -3,7 +3,7 @@ module ActsAsRecursiveTree
     class Ancestors < RelationBuilder
 
       def build_join_condition
-        travers_loc_table[config.parent_key].eq(base_table[config.primary_key])
+        travers_loc_table[parent_key].eq(base_table[primary_key])
       end
 
       def get_query_options(_)

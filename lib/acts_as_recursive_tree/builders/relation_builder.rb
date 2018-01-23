@@ -10,9 +10,12 @@ module ActsAsRecursiveTree
       attr_reader :query_opts, :without_ids
       mattr_reader(:random) { Random.new }
 
+      delegate :primary_key, :depth_column, :parent_key, :parent_type_column, to: :@config
+
       def initialize(klass, ids, exclude_ids: false, &block)
         @klass       = klass
-        @ids         = ActsAsRecursiveTree::Options::Values.create(ids, config)
+        @config      = klass._recursive_tree_config
+        @ids         = ActsAsRecursiveTree::Options::Values.create(ids, @config)
         @without_ids = exclude_ids
 
         @query_opts = get_query_options(block)
@@ -34,15 +37,11 @@ module ActsAsRecursiveTree
         klass.arel_table
       end
 
-      def config
-        klass._recursive_tree_config
-      end
-
       def build
         final_select_mgr = base_table.join(
           create_select_manger.as(recursive_temp_table.name)
         ).on(
-          base_table[config.primary_key].eq(recursive_temp_table[config.primary_key])
+          base_table[primary_key].eq(recursive_temp_table[primary_key])
         )
 
         relation = klass.joins(final_select_mgr.join_sources)
@@ -56,18 +55,18 @@ module ActsAsRecursiveTree
 
       def apply_except_id(relation)
         return relation unless without_ids
-        relation.where(ids.apply_negated_to(base_table[config.primary_key]))
+        relation.where(ids.apply_negated_to(base_table[primary_key]))
       end
 
       def apply_depth(relation)
         return relation unless query_opts.depth_present?
 
-        relation.where(query_opts.depth.apply_to(recursive_temp_table[config.depth_column]))
+        relation.where(query_opts.depth.apply_to(recursive_temp_table[depth_column]))
       end
 
       def apply_order(relation)
         return relation unless query_opts.ensure_ordering
-        relation.order(recursive_temp_table[config.depth_column].asc)
+        relation.order(recursive_temp_table[depth_column].asc)
       end
 
       def create_select_manger
@@ -82,14 +81,14 @@ module ActsAsRecursiveTree
       end
 
       def build_base_select
-        id_node = base_table[config.primary_key]
+        id_node = base_table[primary_key]
 
         base_table.where(
           ids.apply_to(id_node)
         ).project(
           id_node,
-          base_table[config.parent_key],
-          Arel.sql('0').as(config.depth_column.to_s)
+          base_table[parent_key],
+          Arel.sql('0').as(depth_column.to_s)
         )
       end
 
@@ -106,17 +105,17 @@ module ActsAsRecursiveTree
       end
 
       def apply_parent_type_column(arel_condition)
-        return arel_condition unless config.parent_type_column.present?
-        arel_condition.and(base_table[config.parent_type_column].eq(klass.base_class))
+        return arel_condition unless parent_type_column.present?
+        arel_condition.and(base_table[parent_type_column].eq(klass.base_class))
       end
 
       def build_base_join_select(select_manager)
         klass.select(
-          base_table[config.primary_key],
-          base_table[config.parent_key],
+          base_table[primary_key],
+          base_table[parent_key],
           Arel.sql(
-            (travers_loc_table[config.depth_column] + 1).to_sql
-          ).as(config.depth_column.to_s)
+            (travers_loc_table[depth_column] + 1).to_sql
+          ).as(depth_column.to_s)
         ).unscope(where: :type).joins(select_manager.join_sources)
       end
 
