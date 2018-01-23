@@ -6,11 +6,11 @@ module ActsAsRecursiveTree
         new(klass, ids, exclude_ids: exclude_ids, &block).build
       end
 
-      attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table
-      attr_reader :query_opts, :without_ids
+      attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table, :without_ids
       mattr_reader(:random) { Random.new }
 
       delegate :primary_key, :depth_column, :parent_key, :parent_type_column, to: :@config
+      delegate :depth_present?, :depth, :condition, :ensure_ordering, to: :@query_opts
 
       def initialize(klass, ids, exclude_ids: false, &block)
         @klass       = klass
@@ -59,13 +59,13 @@ module ActsAsRecursiveTree
       end
 
       def apply_depth(relation)
-        return relation unless query_opts.depth_present?
+        return relation unless depth_present?
 
-        relation.where(query_opts.depth.apply_to(recursive_temp_table[depth_column]))
+        relation.where(depth.apply_to(recursive_temp_table[depth_column]))
       end
 
       def apply_order(relation)
-        return relation unless query_opts.ensure_ordering
+        return relation unless ensure_ordering
         relation.order(recursive_temp_table[depth_column].asc)
       end
 
@@ -120,8 +120,8 @@ module ActsAsRecursiveTree
       end
 
       def apply_query_opts_condition(relation)
-        return relation unless query_opts.condition.present?
-        relation.merge(query_opts.condition)
+        return relation unless condition.present?
+        relation.merge(condition)
       end
 
       def build_join_condition
