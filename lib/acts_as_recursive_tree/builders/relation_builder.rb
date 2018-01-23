@@ -94,22 +94,35 @@ module ActsAsRecursiveTree
       end
 
       def build_union_select
-        select_manager = base_table.join(travers_loc_table).on(
-          build_join_condition
-        )
+        join_condition = apply_parent_type_column(build_join_condition)
+
+        select_manager = base_table.join(travers_loc_table).on(join_condition)
 
         # need to use ActiveRecord here for merging relation
-        relation = klass.select(
+        relation = build_base_join_select(select_manager)
+
+        relation = apply_query_opts_condition(relation)
+        relation.arel
+      end
+
+      def apply_parent_type_column(arel_condition)
+        return arel_condition unless config.parent_type_column.present?
+        arel_condition.and(base_table[config.parent_type_column].eq(klass.base_class))
+      end
+
+      def build_base_join_select(select_manager)
+        klass.select(
           base_table[config.primary_key],
           base_table[config.parent_key],
           Arel.sql(
             (travers_loc_table[config.depth_column] + 1).to_sql
           ).as(config.depth_column.to_s)
         ).unscope(where: :type).joins(select_manager.join_sources)
+      end
 
-        relation = relation.merge(query_opts.condition) unless query_opts.condition.nil?
-        relation = relation.where(config.parent_type_column => klass.to_s) if config.parent_type_column
-        relation.arel
+      def apply_query_opts_condition(relation)
+        return relation unless query_opts.condition.present?
+        relation.merge(query_opts.condition)
       end
 
       def build_join_condition
