@@ -120,7 +120,8 @@ module ActsAsRecursiveTree
       end
 
       def apply_query_opts_condition(relation)
-        return relation unless condition.present?
+        # check with nil? and not #present?/#blank? which will execute the query
+        return relation if condition.nil?
         relation.merge(condition)
       end
 

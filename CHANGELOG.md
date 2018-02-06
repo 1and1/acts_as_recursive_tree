@@ -1,3 +1,6 @@
+### Version 2.0.2
+- fix for condition relation was executed before merging
+
 ### Version 2.0.1
 - fix for parent_type_column applied not properly
 
