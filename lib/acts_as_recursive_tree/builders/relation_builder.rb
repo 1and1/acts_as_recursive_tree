@@ -1,14 +1,18 @@
 module ActsAsRecursiveTree
   module Builders
+    #
+    # Constructs the Arel necessary for recursion.
+    #
     class RelationBuilder
 
       def self.build(klass, ids, exclude_ids: false, &block)
         new(klass, ids, exclude_ids: exclude_ids, &block).build
       end
 
-      attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table, :without_ids
+      attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table, :without_ids, :query_opts
       mattr_reader(:random) { Random.new }
 
+      # Delegators for easier accessing config and query options
       delegate :primary_key, :depth_column, :parent_key, :parent_type_column, to: :@config
       delegate :depth_present?, :depth, :condition, :ensure_ordering, to: :@query_opts
 
@@ -25,6 +29,13 @@ module ActsAsRecursiveTree
         @travers_loc_table    = Arel::Table.new("traverse_#{rand_int}_loc")
       end
 
+      #
+      # Constructs a new QueryOptions and yield it to the proc if one is present.
+      # Subclasses may override this method to provide sane defaults.
+      #
+      # @param proc [Proc] a proc or nil
+      #
+      # @return [ActsAsRecursiveTree::Options::QueryOptions] the new QueryOptions instance
       def get_query_options(proc)
         opts = ActsAsRecursiveTree::Options::QueryOptions.new
 
@@ -38,18 +49,9 @@ module ActsAsRecursiveTree
       end
 
       def build
-        final_select_mgr = base_table.join(
-          create_select_manger.as(recursive_temp_table.name)
-        ).on(
-          base_table[primary_key].eq(recursive_temp_table[primary_key])
-        )
-
-        relation = klass.joins(final_select_mgr.join_sources)
+        relation = Strategy.for_query_options(@query_opts).build(self)
 
         relation = apply_except_id(relation)
-        relation = apply_depth(relation)
-        relation = apply_order(relation)
-
         relation
       end
 
@@ -69,8 +71,15 @@ module ActsAsRecursiveTree
         relation.order(recursive_temp_table[depth_column].asc)
       end
 
-      def create_select_manger
-        travers_loc_table.project(Arel.star).with(:recursive, build_cte_table)
+      def create_select_manger(column = nil)
+
+        projections = if column
+          travers_loc_table[column]
+        else
+          Arel.star
+        end
+
+        travers_loc_table.project(projections).with(:recursive, build_cte_table)
       end
 
       def build_cte_table
@@ -125,6 +134,9 @@ module ActsAsRecursiveTree
         relation.merge(condition)
       end
 
+      #
+      # U
+      #
       def build_join_condition
         raise 'not implemented'
       end

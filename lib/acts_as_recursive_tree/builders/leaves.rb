@@ -2,7 +2,7 @@ module ActsAsRecursiveTree
   module Builders
     class Leaves < Descendants
 
-      def create_select_manger
+      def create_select_manger(column = nil)
         select_manager = super
 
         select_manager.where(

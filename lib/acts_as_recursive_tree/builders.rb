@@ -5,6 +5,7 @@ module ActsAsRecursiveTree
     autoload :Values
     autoload :DepthCondition
     autoload :QueryOptions
+    autoload :Strategy
     autoload :RelationBuilder
     autoload :Descendants
     autoload :Ancestors

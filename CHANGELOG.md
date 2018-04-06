@@ -1,3 +1,8 @@
+### Version 2.1.0
+- BUGFIX association self_and_siblings not working
+- BUGFIX primary_key of model is retrieved on first usage and not on setup
+- NEW when no ordering/depth is required, then use subselect instead of joining the temp table
+
 ### Version 2.0.2
 - fix for condition relation was executed before merging
 
