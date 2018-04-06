@@ -4,6 +4,7 @@ require_relative 'acts_as_recursive_tree/railtie' if defined?(Rails)
 module ActsAsRecursiveTree
   extend ActiveSupport::Autoload
 
+  autoload :Config
   autoload :ActsMacro
   autoload :Model
   autoload :Associations

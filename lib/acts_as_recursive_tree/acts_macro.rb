@@ -1,5 +1,3 @@
-require 'ostruct'
-
 module ActsAsRecursiveTree
   module ActsMacro
 
@@ -11,11 +9,10 @@ module ActsAsRecursiveTree
     def recursive_tree(parent_key: :parent_id, parent_type_column: nil)
 
       class_attribute :_recursive_tree_config
-      self._recursive_tree_config = OpenStruct.new(
-        primary_key:        self.primary_key.to_sym,
+      self._recursive_tree_config = Config.new(
+        model_class:        self,
         parent_key:         parent_key.to_sym,
-        parent_type_column: parent_type_column.try(:to_sym),
-        depth_column:       :recursive_depth
+        parent_type_column: parent_type_column.try(:to_sym)
       )
 
       include ActsAsRecursiveTree::Model
