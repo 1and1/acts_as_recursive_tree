@@ -1,8 +1,15 @@
 module ActsAsRecursiveTree
   module Builders
     module Strategy
+      #
+      # Build a relation using an INNER JOIN.
+      #
       module Join
-
+        #
+        # Builds the relation.
+        #
+        # @param builder [ActsAsRecursiveTree::Builders::RelationBuilder]
+        # @return [ActiveRecord::Relation]
         def self.build(builder)
           final_select_mgr = builder.base_table.join(
             builder.create_select_manger.as(builder.recursive_temp_table.name)
@@ -20,4 +27,3 @@ module ActsAsRecursiveTree
     end
   end
 end
-

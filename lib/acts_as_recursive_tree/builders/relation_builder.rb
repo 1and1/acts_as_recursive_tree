@@ -72,7 +72,6 @@ module ActsAsRecursiveTree
       end
 
       def create_select_manger(column = nil)
-
         projections = if column
           travers_loc_table[column]
         else

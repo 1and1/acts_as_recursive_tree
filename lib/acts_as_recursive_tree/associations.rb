@@ -20,7 +20,6 @@ module ActsAsRecursiveTree
                through: :parent,
                source: :children,
                class_name:  self.base_class.to_s
-
     end
   end
 end
