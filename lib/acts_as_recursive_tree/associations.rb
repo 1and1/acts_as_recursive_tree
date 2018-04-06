@@ -17,9 +17,10 @@ module ActsAsRecursiveTree
                inverse_of:  :parent
 
       has_many :self_and_siblings,
-               class_name:  self.base_class.to_s,
-               primary_key: self._recursive_tree_config.parent_key,
-               foreign_key: self._recursive_tree_config.parent_key
+               through: :parent,
+               source: :children,
+               class_name:  self.base_class.to_s
+
     end
   end
 end
