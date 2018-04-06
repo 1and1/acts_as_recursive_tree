@@ -9,7 +9,7 @@ module ActsAsRecursiveTree
         new(klass, ids, exclude_ids: exclude_ids, &block).build
       end
 
-      attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table, :without_ids, :query_opts
+      attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table, :without_ids
       mattr_reader(:random) { Random.new }
 
       # Delegators for easier accessing config and query options
