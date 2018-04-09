@@ -1,3 +1,7 @@
+### Version 2.1.1
+- Enabled subselect query when using depth
+- new QueryOption query_strategy for forcing a specific strategy (:join, :subselect)
+
 ### Version 2.1.0
 - BUGFIX association self_and_siblings not working
 - BUGFIX primary_key of model is retrieved on first usage and not on setup
