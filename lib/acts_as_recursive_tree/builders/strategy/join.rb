@@ -19,9 +19,13 @@ module ActsAsRecursiveTree
 
           relation = builder.klass.joins(final_select_mgr.join_sources)
 
-          relation = builder.apply_depth(relation)
-          relation = builder.apply_order(relation)
+          relation = apply_order(builder, relation)
           relation
+        end
+
+        def self.apply_order(builder, relation)
+          return relation unless builder.ensure_ordering
+          relation.order(builder.recursive_temp_table[builder.depth_column].asc)
         end
       end
     end

@@ -19,7 +19,7 @@ module ActsAsRecursiveTree
       #
       # @return a strategy class best suited for the opts
       def self.for_query_options(query_opts)
-        if query_opts.depth_present? || query_opts.ensure_ordering
+        if query_opts.ensure_ordering
           Join
         else
           Subselect

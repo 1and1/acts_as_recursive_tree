@@ -62,15 +62,10 @@ module ActsAsRecursiveTree
         relation.where(ids.apply_negated_to(base_table[primary_key]))
       end
 
-      def apply_depth(relation)
-        return relation unless depth_present?
+      def apply_depth(select_manager)
+        return select_manager unless depth_present?
 
-        relation.where(depth.apply_to(recursive_temp_table[depth_column]))
-      end
-
-      def apply_order(relation)
-        return relation unless ensure_ordering
-        relation.order(recursive_temp_table[depth_column].asc)
+        select_manager.where(depth.apply_to(travers_loc_table[depth_column]))
       end
 
       def create_select_manger(column = nil)
@@ -80,7 +75,9 @@ module ActsAsRecursiveTree
           Arel.star
         end
 
-        travers_loc_table.project(projections).with(:recursive, build_cte_table)
+        select_mgr = travers_loc_table.project(projections).with(:recursive, build_cte_table)
+
+        apply_depth(select_mgr)
       end
 
       def build_cte_table
