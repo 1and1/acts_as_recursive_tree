@@ -1,9 +1,7 @@
 module ActsAsRecursiveTree
   module Builders
     class Descendants < RelationBuilder
-      def build_join_condition
-        base_table[parent_key].eq(travers_loc_table[primary_key])
-      end
+      self.traversal_strategy = ActsAsRecursiveTree::Builders::Strategy::Descendant
     end
   end
 end

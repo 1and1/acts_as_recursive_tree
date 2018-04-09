@@ -9,6 +9,8 @@ module ActsAsRecursiveTree
         new(klass, ids, exclude_ids: exclude_ids, &block).build
       end
 
+      class_attribute :traversal_strategy, instance_writer: false
+
       attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table, :without_ids
       mattr_reader(:random) { Random.new }
 
@@ -101,7 +103,9 @@ module ActsAsRecursiveTree
       end
 
       def build_union_select
-        join_condition = apply_parent_type_column(build_join_condition)
+        join_condition = apply_parent_type_column(
+          traversal_strategy.build(self)
+        )
 
         select_manager = base_table.join(travers_loc_table).on(join_condition)
 
@@ -132,14 +136,6 @@ module ActsAsRecursiveTree
         return relation if condition.nil?
         relation.merge(condition)
       end
-
-      #
-      # U
-      #
-      def build_join_condition
-        raise 'not implemented'
-      end
-
     end
   end
 end

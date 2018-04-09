@@ -9,6 +9,9 @@ module ActsAsRecursiveTree
       autoload :Join
       autoload :Subselect
 
+      autoload :Descendant
+      autoload :Ancestor
+
       #
       # Returns a Strategy appropriate for query_opts
       #
