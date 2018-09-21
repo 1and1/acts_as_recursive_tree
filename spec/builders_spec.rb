@@ -20,12 +20,14 @@ end
 
 shared_examples 'basic recursive examples' do
   it { is_expected.to start_with "SELECT \"#{model_class.table_name}\".* FROM \"#{model_class.table_name}\"" }
+
   it { is_expected.to match /WHERE "#{model_class.table_name}"."#{model_class.primary_key}" = #{model_id}/ }
+
   it { is_expected.to match /WITH RECURSIVE "#{builder.travers_loc_table.name}" AS/ }
+
   it { is_expected.to match /SELECT "#{model_class.table_name}"."#{model_class.primary_key}", "#{model_class.table_name}"."#{model_class._recursive_tree_config.parent_key}", 0 AS recursive_depth FROM "#{model_class.table_name}"/ }
+
   it { is_expected.to match /SELECT "#{model_class.table_name}"."#{model_class.primary_key}", "#{model_class.table_name}"."#{model_class._recursive_tree_config.parent_key}", \("#{builder.travers_loc_table.name}"."recursive_depth" \+ 1\) AS recursive_depth FROM "#{model_class.table_name}"/ }
-  it { is_expected.to match /#{Regexp.escape(builder.travers_loc_table.project(Arel.star).to_sql)}/ }
-  it { is_expected.to match /"#{model_class.table_name}"."#{model_class.primary_key}" = "#{builder.recursive_temp_table.name}"."#{model_class.primary_key}"/ }
 end
 
 shared_examples 'build recursive query' do
@@ -70,6 +72,7 @@ shared_examples 'descendant query' do
   include_context 'base_setup'
 
   it { is_expected.to match /"#{model_class.table_name}"."#{model_class._recursive_tree_config.parent_key}" = "#{builder.travers_loc_table.name}"."#{model_class.primary_key}"/ }
+  it { is_expected.to match /#{Regexp.escape(builder.travers_loc_table.project(builder.travers_loc_table[model_class.primary_key]).to_sql)}/ }
 end
 
 shared_context 'context with ordering' do
