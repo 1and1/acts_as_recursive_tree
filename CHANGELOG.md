@@ -1,3 +1,6 @@
+### Version 2.2.0
+- Rails 6.0 support
+
 ### Version 2.1.1
 - Enabled subselect query when using depth
 - new QueryOption query_strategy for forcing a specific strategy (:join, :subselect)
