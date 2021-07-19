@@ -57,7 +57,7 @@ describe ActsAsRecursiveTree::Options::Values do
       let(:range) { 1..3 }
       subject(:value) { described_class.create(range) }
 
-      it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::MultiValue }
+      it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::RangeValue }
 
       it 'should apply_to' do
         expect(value.apply_to(attribute).to_sql).to end_with "BETWEEN #{range.begin} AND #{range.end}"

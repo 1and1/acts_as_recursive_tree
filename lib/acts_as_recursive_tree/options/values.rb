@@ -38,6 +38,16 @@ module ActsAsRecursiveTree
         end
       end
 
+      class RangeValue < Base
+        def apply_to(attribute)
+          attribute.between(prepared_value)
+        end
+
+        def apply_negated_to(attribute)
+          attribute.not_between(prepared_value)
+        end
+      end
+
       class MultiValue < Base
         def apply_to(attribute)
           attribute.in(prepared_value)
@@ -62,6 +72,8 @@ module ActsAsRecursiveTree
           SingleValue
         when ::ActiveRecord::Relation
           Relation
+        when Range
+          RangeValue
         when Enumerable
           MultiValue
         when ::ActiveRecord::Base
