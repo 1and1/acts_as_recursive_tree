@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         ruby-version: ['2.5', '2.6', '2.7']
-        gemfile: [ar-50, ar-51, ar-52, ar-60, ar-61]
+        gemfile: [ar_50, ar_51, ar_52, ar_60, ar_61]
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
