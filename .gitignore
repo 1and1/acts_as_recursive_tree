@@ -15,4 +15,5 @@ mkmf.log
 /.idea
 db.log
 test.sqlite3
-/gemfiles
+/gemfiles/*.lock
+/gemfiles/.bundle
