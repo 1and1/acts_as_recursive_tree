@@ -1,5 +1,8 @@
 # ActsAsRecursiveTree
 
+[![CI Status](https://github.com/1and1/acts_as_recursive_tree/workflows/CI/badge.svg?branch=main)](https://github.com/1and1/acts_as_recursive_tree/actions?query=workflow%3ACI+branch%3Amaster)
+[![Gem Version](https://badge.fury.io/rb/acts_as_recursive_tree.svg)](https://badge.fury.io/rb/acts_as_recursive_tree)
+
 Use the power of recursive SQL statements in your Rails application.
 
 When you have tree based data in your application, you always to struggle with retrieving data. There are solutions, but the always come at a price:
