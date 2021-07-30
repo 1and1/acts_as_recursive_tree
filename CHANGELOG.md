@@ -1,3 +1,6 @@
+### Version 2.2.1
+- Rails 6.1 support
+
 ### Version 2.2.0
 - Rails 6.0 support
 
@@ -32,4 +35,4 @@
 - BUGFIX: ordering result when querying ancestors
 
 ### Version 1.0.0
-- inital release using AREL
+- initial release using AREL
