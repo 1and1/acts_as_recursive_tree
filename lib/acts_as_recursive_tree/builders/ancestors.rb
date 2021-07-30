@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActsAsRecursiveTree
   module Builders
     class Ancestors < RelationBuilder
@@ -8,7 +10,6 @@ module ActsAsRecursiveTree
         opts.ensure_ordering!
         opts
       end
-
     end
   end
 end

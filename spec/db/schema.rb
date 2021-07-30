@@ -1,7 +1,6 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
-ActiveRecord::Schema.define(:version => 0) do
-
+ActiveRecord::Schema.define(version: 0) do
   create_table :nodes do |t|
     t.integer :parent_id
     t.string :name

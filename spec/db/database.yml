@@ -1,12 +1,9 @@
-common: &common
+sqlite:
   database:
   host: localhost
   pool: 50
   timeout: 5000
   reaping_frequency: 1000
   min_messages: ERROR
-
-sqlite:
-  <<: *common
   adapter: sqlite3
   database: test.sqlite3

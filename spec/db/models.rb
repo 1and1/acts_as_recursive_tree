@@ -1,37 +1,37 @@
-ActiveRecord::Base.class_exec do
+# frozen_string_literal: true
+
+class ApplicationRecord < ::ActiveRecord::Base
+  self.abstract_class = true
+
   extend ActsAsRecursiveTree::ActsMacro
 end
 
-class Node < ActiveRecord::Base
+class Node < ApplicationRecord
   acts_as_tree
   has_one :node_info
 end
 
-class NodeInfo < ActiveRecord::Base
+class NodeInfo < ApplicationRecord
   belongs_to :node
 end
 
-class NodeWithPolymorphicParent < ActiveRecord::Base
+class NodeWithPolymorphicParent < ApplicationRecord
   acts_as_tree parent_key: :other_id, parent_type_column: :other_type
 end
 
-
-class NodeWithOtherParentKey < ActiveRecord::Base
+class NodeWithOtherParentKey < ApplicationRecord
   acts_as_tree parent_key: :other_id
 end
 
-class Location < ActiveRecord::Base
+class Location < ApplicationRecord
   acts_as_tree
 end
 
 class Building < Location
-
 end
 
 class Floor < Location
-
 end
 
 class Room < Location
-
 end

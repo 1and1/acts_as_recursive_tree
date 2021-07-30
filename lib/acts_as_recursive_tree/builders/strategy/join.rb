@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActsAsRecursiveTree
   module Builders
     module Strategy
@@ -19,12 +21,12 @@ module ActsAsRecursiveTree
 
           relation = builder.klass.joins(final_select_mgr.join_sources)
 
-          relation = apply_order(builder, relation)
-          relation
+          apply_order(builder, relation)
         end
 
         def self.apply_order(builder, relation)
           return relation unless builder.ensure_ordering
+
           relation.order(builder.recursive_temp_table[builder.depth_column].asc)
         end
       end

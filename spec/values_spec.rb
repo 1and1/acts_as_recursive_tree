@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 shared_examples 'single values' do
@@ -5,11 +7,11 @@ shared_examples 'single values' do
 
   it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::SingleValue }
 
-  it 'should apply_to' do
+  it 'apply_toes' do
     expect(value.apply_to(attribute).to_sql).to end_with " = #{single_value}"
   end
 
-  it 'should apply_negated_to' do
+  it 'apply_negated_toes' do
     expect(value.apply_negated_to(attribute).to_sql).to end_with " != #{single_value}"
   end
 end
@@ -19,8 +21,8 @@ describe ActsAsRecursiveTree::Options::Values do
   let(:attribute) { table['test_attr'] }
 
   context 'invalid agurment' do
-    it 'should raise exception' do
-      expect{described_class.create(nil)}.to raise_exception /is not supported/
+    it 'raises exception' do
+      expect { described_class.create(nil) }.to raise_exception(/is not supported/)
     end
   end
 
@@ -34,52 +36,54 @@ describe ActsAsRecursiveTree::Options::Values do
     it_behaves_like 'single values' do
       let(:value_obj) { Node.new(id: single_value) }
     end
-
   end
 
   context 'multi value' do
     context 'Array' do
-      let(:array) { [1, 2, 3] }
       subject(:value) { described_class.create(array) }
+
+      let(:array) { [1, 2, 3] }
 
       it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::MultiValue }
 
-      it 'should apply_to' do
+      it 'apply_toes' do
         expect(value.apply_to(attribute).to_sql).to end_with " IN (#{array.join(', ')})"
       end
 
-      it 'should apply_negated_to' do
+      it 'apply_negated_toes' do
         expect(value.apply_negated_to(attribute).to_sql).to end_with " NOT IN (#{array.join(', ')})"
       end
     end
 
     context 'Range' do
-      let(:range) { 1..3 }
       subject(:value) { described_class.create(range) }
+
+      let(:range) { 1..3 }
 
       it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::RangeValue }
 
-      it 'should apply_to' do
+      it 'apply_toes' do
         expect(value.apply_to(attribute).to_sql).to end_with "BETWEEN #{range.begin} AND #{range.end}"
       end
 
-      it 'should apply_negated_to' do
-        expect(value.apply_negated_to(attribute).to_sql).to match /< #{range.begin} OR.* > #{range.end}/
+      it 'apply_negated_toes' do
+        expect(value.apply_negated_to(attribute).to_sql).to match(/< #{range.begin} OR.* > #{range.end}/)
       end
     end
 
     context 'Relation' do
-      let(:relation) { Node.where(name: 'test') }
       subject(:value) { described_class.create(relation, OpenStruct.new(primary_key: :id)) }
+
+      let(:relation) { Node.where(name: 'test') }
 
       it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::Relation }
 
-      it 'should apply_to' do
-        expect(value.apply_to(attribute).to_sql).to match /IN \(SELECT.*\)/
+      it 'apply_toes' do
+        expect(value.apply_to(attribute).to_sql).to match(/IN \(SELECT.*\)/)
       end
 
-      it 'should apply_negated_to' do
-        expect(value.apply_negated_to(attribute).to_sql).to match /NOT IN \(SELECT.*\)/
+      it 'apply_negated_toes' do
+        expect(value.apply_negated_to(attribute).to_sql).to match(/NOT IN \(SELECT.*\)/)
       end
     end
   end

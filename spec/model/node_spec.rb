@@ -1,12 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Node do
-
   def create_tree(max_level, current_level = 0, node = nil)
-
-    if node.nil?
-      node = Node.create!(name: 'root')
-    end
+    node = Node.create!(name: 'root') if node.nil?
 
     1.upto(max_level - current_level) do |index|
       child = node.children.create!(name: "child #{index} - level #{current_level}")
@@ -21,80 +19,72 @@ describe Node do
     @child = @root.children.first
   end
 
-  context '#children' do
-    it 'should have 3 children' do
-      expect(@root.children.count).to eql(3)
+  describe '#children' do
+    it 'has 3 children' do
+      expect(@root.children.count).to be(3)
     end
 
-    it 'should not include root node ' do
-      expect(@root.children).to_not include(@root)
+    it 'does not include root node ' do
+      expect(@root.children).not_to include(@root)
     end
-
   end
 
-  context '#descendants' do
-
-    it 'should have 15 descendants' do
+  describe '#descendants' do
+    it 'has 15 descendants' do
       expect(@root.descendants.count).to eql(3 + (3 * 2) + (3 * 2 * 1))
     end
 
-    it 'should not include root' do
-      expect(@root.descendants).to_not include(@root)
+    it 'does not include root' do
+      expect(@root.descendants).not_to include(@root)
     end
   end
-  context '#self_and_descendants' do
 
-    it 'should have 15 descendants and self' do
+  describe '#self_and_descendants' do
+    it 'has 15 descendants and self' do
       expect(@root.self_and_descendants.count).to eql(@root.descendants.count + 1)
     end
 
-    it 'should include self' do
+    it 'includes self' do
       expect(@root.self_and_descendants.all).to include(@root)
     end
   end
 
-  context '#root?' do
-
-    it 'should be true for root node' do
-      expect(@root.root?).to be_truthy
+  describe '#root?' do
+    it 'is true for root node' do
+      expect(@root).to be_root
     end
 
-    it 'should be false for children' do
-      expect(@child.root?).to be_falsey
+    it 'is false for children' do
+      expect(@child).not_to be_root
     end
-
   end
 
-  context '#leaf?' do
-
-    it 'should be false for root node' do
-      expect(@root.leaf?).to be_falsey
+  describe '#leaf?' do
+    it 'is false for root node' do
+      expect(@root).not_to be_leaf
     end
 
-    it 'should be true for children' do
-      expect(@root.leaves.first.leaf?).to be_truthy
+    it 'is true for children' do
+      expect(@root.leaves.first).to be_leaf
     end
-
   end
 
-
-  context '#leaves' do
-    it 'should have 6 leaves' do
-      expect(@root.leaves.count).to eql(6)
+  describe '#leaves' do
+    it 'has 6 leaves' do
+      expect(@root.leaves.count).to be(6)
     end
   end
 
   describe 'child' do
-
-    it 'should have root as parent' do
+    it 'has root as parent' do
       expect(@child.parent).to eql(@root)
     end
 
-    it 'should have 1 ancestor' do
-      expect(@child.ancestors.count).to eql(1)
+    it 'has 1 ancestor' do
+      expect(@child.ancestors.count).to be(1)
     end
 
-    it 'should have root as only ancestor' do
+    it 'has root as only ancestor' do
       expect(@child.ancestors.first).to eql(@root)
     end
 
@@ -111,19 +101,15 @@ describe Node do
     end
   end
 
-
   describe 'scopes' do
-
     context 'roots' do
-
       it 'has only one root node' do
-        expect(Node.roots.count).to eql(1)
+        expect(described_class.roots.count).to be(1)
       end
 
       it 'is the @root node' do
-        expect(Node.roots.first).to eql(@root)
+        expect(described_class.roots.first).to eql(@root)
       end
     end
-
   end
 end
