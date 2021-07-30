@@ -8,10 +8,16 @@ ActiveRecord::Migration.verbose = false
 
 ActiveRecord::Base.configurations = YAML::load(File.read("#{database_folder}/database.yml"))
 
-config = ActiveRecord::Base.configurations[database_adapter]
+if ActiveRecord.version >= Gem::Version.new('6.1.0')
+  config = ActiveRecord::Base.configurations.configs_for env_name: database_adapter, name: "primary"
+  database = config.database
+else
+  config = ActiveRecord::Base.configurations[database_adapter]
+  database = config["database"]
+end
 
 # remove database if present
-FileUtils.rm config['database'], force: true
+FileUtils.rm database, force: true
 
 ActiveRecord::Base.establish_connection(database_adapter.to_sym)
 ActiveRecord::Base.establish_connection(config)
