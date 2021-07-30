@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module ActsAsRecursiveTree
   module Options
     class DepthCondition
-
       def ==(other)
         @value     = Values.create(other)
         @operation = true

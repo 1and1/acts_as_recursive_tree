@@ -1,12 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Relation' do
-
   def create_tree(max_level, current_level: 0, node: nil, stop_at: nil)
-
-    if node.nil?
-      node = Node.create!(name: 'root')
-    end
+    node = Node.create!(name: 'root') if node.nil?
 
     1.upto(max_level - current_level) do |index|
       child = node.children.create!(name: "child #{index} - level #{current_level}", active: stop_at > current_level)
@@ -23,7 +21,6 @@ describe 'Relation' do
   end
 
   context 'descendants' do
-
     it 'works with simple relation' do
       desc = @root.descendants { |opts| opts.condition = Node.where(active: true) }
       desc.all.each do |node|
@@ -40,7 +37,6 @@ describe 'Relation' do
   end
 
   context 'ancestors' do
-
     it 'works with simple relation' do
       ancestors = @root.leaves.first.ancestors { |opts| opts.condition = Node.where(active: false) }.to_a
 
@@ -48,7 +44,7 @@ describe 'Relation' do
         expect(node.active).to be_falsey
       end
 
-      expect(ancestors).to_not include(@root)
+      expect(ancestors).not_to include(@root)
     end
 
     it 'works with joins relation' do
@@ -56,8 +52,7 @@ describe 'Relation' do
       ancestors.all.each do |node|
         expect(node.node_info.status).to eql('bar')
       end
-      expect(ancestors).to_not include(@root)
+      expect(ancestors).not_to include(@root)
     end
   end
-
 end

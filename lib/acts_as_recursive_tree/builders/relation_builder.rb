@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 module ActsAsRecursiveTree
   module Builders
     #
     # Constructs the Arel necessary for recursion.
     #
     class RelationBuilder
-
       def self.build(klass, ids, exclude_ids: false, &block)
         new(klass, ids, exclude_ids: exclude_ids, &block).build
       end
@@ -12,6 +13,7 @@ module ActsAsRecursiveTree
       class_attribute :traversal_strategy, instance_writer: false
 
       attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table, :without_ids
+
       mattr_reader(:random) { Random.new }
 
       # Delegators for easier accessing config and query options
@@ -41,7 +43,7 @@ module ActsAsRecursiveTree
       def get_query_options(proc)
         opts = ActsAsRecursiveTree::Options::QueryOptions.new
 
-        proc.call(opts) if proc
+        proc&.call(opts)
 
         opts
       end
@@ -53,12 +55,12 @@ module ActsAsRecursiveTree
       def build
         relation = Strategy.for_query_options(@query_opts).build(self)
 
-        relation = apply_except_id(relation)
-        relation
+        apply_except_id(relation)
       end
 
       def apply_except_id(relation)
         return relation unless without_ids
+
         relation.where(ids.apply_negated_to(base_table[primary_key]))
       end
 
@@ -70,10 +72,10 @@ module ActsAsRecursiveTree
 
       def create_select_manger(column = nil)
         projections = if column
-          travers_loc_table[column]
-        else
-          Arel.star
-        end
+                        travers_loc_table[column]
+                      else
+                        Arel.star
+                      end
 
         select_mgr = travers_loc_table.project(projections).with(:recursive, build_cte_table)
 
@@ -114,7 +116,8 @@ module ActsAsRecursiveTree
       end
 
       def apply_parent_type_column(arel_condition)
-        return arel_condition unless parent_type_column.present?
+        return arel_condition if parent_type_column.blank?
+
         arel_condition.and(base_table[parent_type_column].eq(klass.base_class))
       end
 
@@ -131,6 +134,7 @@ module ActsAsRecursiveTree
       def apply_query_opts_condition(relation)
         # check with nil? and not #present?/#blank? which will execute the query
         return relation if condition.nil?
+
         relation.merge(condition)
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActsAsRecursiveTree
   #
   # Stores the configuration of one Model class

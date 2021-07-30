@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActsAsRecursiveTree
   module Builders
     extend ActiveSupport::Autoload

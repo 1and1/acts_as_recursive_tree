@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActsAsRecursiveTree
   module Model
     extend ActiveSupport::Concern
@@ -40,7 +42,7 @@ module ActsAsRecursiveTree
     ##
     # Returns the root node of the tree.
     def root
-      self_and_ancestors.where(self._recursive_tree_config.parent_key => nil).first
+      self_and_ancestors.where(_recursive_tree_config.parent_key => nil).first
     end
 
     ##
@@ -48,7 +50,7 @@ module ActsAsRecursiveTree
     #
     # subchild1.siblings # => [subchild2]
     def siblings
-      self_and_siblings.where.not(id: self.id)
+      self_and_siblings.where.not(id: id)
     end
 
     ##
@@ -57,11 +59,11 @@ module ActsAsRecursiveTree
     # root.self_and_children # => [root, child1]
     def self_and_children
       table = self.class.arel_table
-      id    = self.attributes[self._recursive_tree_config.primary_key.to_s]
+      id    = attributes[_recursive_tree_config.primary_key.to_s]
 
       base_class.where(
-        table[self._recursive_tree_config.primary_key].eq(id).or(
-          table[self._recursive_tree_config.parent_key].eq(id)
+        table[_recursive_tree_config.primary_key].eq(id).or(
+          table[_recursive_tree_config.parent_key].eq(id)
         )
       )
     end
@@ -73,13 +75,12 @@ module ActsAsRecursiveTree
       base_class.leaves_of(self)
     end
 
-
     # Returns true if node has no parent, false otherwise
     #
     # subchild1.root? # => false
     # root.root? # => true
     def root?
-      self.attributes[self._recursive_tree_config.parent_key.to_s].blank?
+      attributes[_recursive_tree_config.parent_key.to_s].blank?
     end
 
     # Returns true if node has no children, false otherwise
@@ -87,7 +88,7 @@ module ActsAsRecursiveTree
     # subchild1.leaf? # => true
     # child1.leaf? # => false
     def leaf?
-      !children.any?
+      children.none?
     end
 
     def base_class

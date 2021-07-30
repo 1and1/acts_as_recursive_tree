@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActsAsRecursiveTree
   module Options
     module Values
@@ -13,13 +15,9 @@ module ActsAsRecursiveTree
           value
         end
 
-        def apply_to(attribute)
+        def apply_to(attribute); end
 
-        end
-
-        def apply_negated_to(attribute)
-
-        end
+        def apply_negated_to(attribute); end
       end
 
       class SingleValue < Base
@@ -68,19 +66,19 @@ module ActsAsRecursiveTree
 
       def self.create(value, config = nil)
         klass = case value
-        when ::Numeric, ::String
-          SingleValue
-        when ::ActiveRecord::Relation
-          Relation
-        when Range
-          RangeValue
-        when Enumerable
-          MultiValue
-        when ::ActiveRecord::Base
-          ActiveRecord
-        else
-          raise "#{value.class} is not supported"
-        end
+                when ::Numeric, ::String
+                  SingleValue
+                when ::ActiveRecord::Relation
+                  Relation
+                when Range
+                  RangeValue
+                when Enumerable
+                  MultiValue
+                when ::ActiveRecord::Base
+                  ActiveRecord
+                else
+                  raise "#{value.class} is not supported"
+                end
 
         klass.new(value, config)
       end
