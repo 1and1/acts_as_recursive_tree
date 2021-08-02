@@ -18,12 +18,12 @@ Gem::Specification.new do |spec|
     'bug_tracker_uri' => 'https://github.com/1and1/acts_as_recursive_tree/issues',
     'changelog_uri' => 'https://github.com/1and1/acts_as_recursive_tree/CHANGELOG.md'
   }
-  spec.required_ruby_version = '>= 2.0.0'
+  spec.required_ruby_version = '>= 2.5.0'
   spec.files                 = `git ls-files -z`.split("\x0")
   spec.test_files            = spec.files.grep(%r{^spec/})
   spec.require_paths         = ['lib']
 
-  spec.add_runtime_dependency 'activerecord', '>= 5.0.0', '< 6.2.0'
+  spec.add_runtime_dependency 'activerecord', '>= 5.2.0', '< 7.0'
 
   spec.add_development_dependency 'appraisal', '~> 2.4'
   spec.add_development_dependency 'database_cleaner', '~> 1.5'
