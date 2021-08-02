@@ -5,15 +5,7 @@ module ActsAsRecursiveTree
     #
     # Strategy module for different strategies of how to build the resulting query.
     #
-    module Strategy
-      extend ActiveSupport::Autoload
-
-      autoload :Join
-      autoload :Subselect
-
-      autoload :Descendant
-      autoload :Ancestor
-
+    module Strategies
       #
       # Returns a Strategy appropriate for query_opts
       #
