@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Base test class
 class ApplicationRecord < ::ActiveRecord::Base
   self.abstract_class = true
 

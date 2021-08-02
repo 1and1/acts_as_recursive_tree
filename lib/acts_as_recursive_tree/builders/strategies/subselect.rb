@@ -2,7 +2,7 @@
 
 module ActsAsRecursiveTree
   module Builders
-    module Strategy
+    module Strategies
       #
       # Strategy for building a relation using an WHERE ID IN(...).
       #

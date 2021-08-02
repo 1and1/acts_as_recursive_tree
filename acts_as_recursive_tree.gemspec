@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.name                  = 'acts_as_recursive_tree'
   spec.version               = ActsAsRecursiveTree::VERSION
   spec.authors               = ['Wolfgang Wedelich-John', 'Willem Mulder']
-  spec.email                 = %w[wolfgang.wedelich@ionos.org 14mRh4X0r@gmail.com]
+  spec.email                 = %w[wolfgang.wedelich@ionos.com 14mRh4X0r@gmail.com]
   spec.summary               = 'Drop in replacement for acts_as_tree but using recursive queries'
   spec.description           = '
   This is a ruby gem that provides drop in replacement for acts_as_tree but makes use of SQL recursive statement. Be sure to have a DBMS that supports recursive queries when using this gem (e.g. PostgreSQL or SQLite). '
@@ -24,6 +24,8 @@ Gem::Specification.new do |spec|
   spec.require_paths         = ['lib']
 
   spec.add_runtime_dependency 'activerecord', '>= 5.2.0', '< 7.0'
+  spec.add_runtime_dependency 'activesupport', '>= 5.2.0', '< 7.0'
+  spec.add_runtime_dependency 'zeitwerk', '>= 2.4'
 
   spec.add_development_dependency 'appraisal', '~> 2.4'
   spec.add_development_dependency 'database_cleaner', '~> 1.5'

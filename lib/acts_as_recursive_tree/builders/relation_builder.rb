@@ -53,7 +53,7 @@ module ActsAsRecursiveTree
       end
 
       def build
-        relation = Strategy.for_query_options(@query_opts).build(self)
+        relation = Strategies.for_query_options(@query_opts).build(self)
 
         apply_except_id(relation)
       end

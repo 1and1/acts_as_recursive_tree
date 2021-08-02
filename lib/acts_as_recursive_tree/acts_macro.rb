@@ -20,6 +20,6 @@ module ActsAsRecursiveTree
       include ActsAsRecursiveTree::Scopes
     end
 
-    alias_method :acts_as_tree, :recursive_tree
+    alias acts_as_tree recursive_tree
   end
 end

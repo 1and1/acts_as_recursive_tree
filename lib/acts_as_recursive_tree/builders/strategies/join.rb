@@ -2,7 +2,7 @@
 
 module ActsAsRecursiveTree
   module Builders
-    module Strategy
+    module Strategies
       #
       # Build a relation using an INNER JOIN.
       #

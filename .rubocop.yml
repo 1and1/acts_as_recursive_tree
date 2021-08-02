@@ -9,6 +9,18 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
 
+Metrics/AbcSize:
+  Max: 20
+
+Rails/RakeEnvironment:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 4
+
+Style/Alias:
+  EnforcedStyle: prefer_alias
+
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'gemfiles/**/*'
