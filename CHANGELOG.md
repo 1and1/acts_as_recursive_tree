@@ -1,4 +1,4 @@
-### Next
+### Version 3.0.0
 - BREAKING: Dropped support for Rails < 5.2
 - BREAKING: Increased minimum Ruby version to 2.5
 - ADD: initial support for Rails < 7
