@@ -12,3 +12,7 @@ AllCops:
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'gemfiles/**/*'
+
+Style/StringLiterals:
+  Exclude:
+    - 'gemfiles/**/*'

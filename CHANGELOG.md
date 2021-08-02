@@ -1,3 +1,8 @@
+### Next
+- BREAKING: Dropped support for Rails < 5.2
+- BREAKING: Increased minimum Ruby version to 2.5
+- ADD: initial support for Rails < 7
+
 ### Version 2.2.1
 - Rails 6.1 support
 
