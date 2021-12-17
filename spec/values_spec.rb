@@ -72,9 +72,16 @@ describe ActsAsRecursiveTree::Options::Values do
     end
 
     context 'Relation' do
-      subject(:value) { described_class.create(relation, OpenStruct.new(primary_key: :id)) }
+      subject(:value) { described_class.create(relation, double) }
 
       let(:relation) { Node.where(name: 'test') }
+      let(:double) do
+        Class.new do
+          def self.primary_key
+            :id
+          end
+        end
+      end
 
       it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::Relation }
 

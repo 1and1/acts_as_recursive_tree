@@ -24,7 +24,7 @@ describe Node do
       expect(@root.children.count).to be(3)
     end
 
-    it 'does not include root node ' do
+    it 'does not include root node' do
       expect(@root.children).not_to include(@root)
     end
   end

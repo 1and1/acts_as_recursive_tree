@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'fileutils'
 
 database_folder           = "#{File.dirname(__FILE__)}/../db"

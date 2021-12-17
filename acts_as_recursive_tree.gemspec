@@ -16,7 +16,8 @@ Gem::Specification.new do |spec|
   spec.license               = 'MIT'
   spec.metadata              = {
     'bug_tracker_uri' => 'https://github.com/1and1/acts_as_recursive_tree/issues',
-    'changelog_uri' => 'https://github.com/1and1/acts_as_recursive_tree/blob/main/CHANGELOG.md'
+    'changelog_uri' => 'https://github.com/1and1/acts_as_recursive_tree/blob/main/CHANGELOG.md',
+    'rubygems_mfa_required' => 'true'
   }
   spec.required_ruby_version = '>= 2.5.0'
   spec.files                 = `git ls-files -z`.split("\x0")
@@ -31,9 +32,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'database_cleaner', '~> 1.5'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec-rails', '>= 3.5'
-  spec.add_development_dependency 'rubocop', '>= 1.8.0'
-  spec.add_development_dependency 'rubocop-rails', '>= 2.9.0'
-  spec.add_development_dependency 'rubocop-rspec', '>= 2.1.0'
+  spec.add_development_dependency 'rubocop', '~> 1.23.0'
+  spec.add_development_dependency 'rubocop-rails', '~> 2.12.0'
+  spec.add_development_dependency 'rubocop-rspec', '~> 2.6.0'
 
   spec.add_development_dependency 'sqlite3', '~> 1.3'
 end
