@@ -12,6 +12,12 @@ When you have tree based data in your application, you always to struggle with r
 
 Luckily, there is already a SQL standard that makes it very easy to retrieve data in the traditional parent/child relation. Currently this is only supported in sqlite and Postgres. With this it is possible to query complete trees without the need of extra tables or indices.
 
+## Supported environments
+ActsAsRecursiveTree currently supports following ActiveRecord versions and is tested for compatibility:
+  * ActiveRecord 5.2.x
+  * ActiveRecord 6.0.x
+  * ActiveRecord 6.1.x
+  * ActiveRecord 7.0.x
 
 ## Installation
 
