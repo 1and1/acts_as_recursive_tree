@@ -24,8 +24,8 @@ Gem::Specification.new do |spec|
   spec.test_files            = spec.files.grep(%r{^spec/})
   spec.require_paths         = ['lib']
 
-  spec.add_runtime_dependency 'activerecord', '>= 5.2.0', '< 7.0'
-  spec.add_runtime_dependency 'activesupport', '>= 5.2.0', '< 7.0'
+  spec.add_runtime_dependency 'activerecord', '>= 5.2.0', '< 7.1'
+  spec.add_runtime_dependency 'activesupport', '>= 5.2.0', '< 7.1'
   spec.add_runtime_dependency 'zeitwerk', '>= 2.4'
 
   spec.add_development_dependency 'appraisal', '~> 2.4'
