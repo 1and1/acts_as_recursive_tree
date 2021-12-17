@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.license               = 'MIT'
   spec.metadata              = {
     'bug_tracker_uri' => 'https://github.com/1and1/acts_as_recursive_tree/issues',
-    'changelog_uri' => 'https://github.com/1and1/acts_as_recursive_tree/CHANGELOG.md'
+    'changelog_uri' => 'https://github.com/1and1/acts_as_recursive_tree/blob/main/CHANGELOG.md'
   }
   spec.required_ruby_version = '>= 2.5.0'
   spec.files                 = `git ls-files -z`.split("\x0")
