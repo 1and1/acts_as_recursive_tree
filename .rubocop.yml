@@ -9,6 +9,9 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
 
+Gemspec/RequireMFA:
+  Enabled: false
+
 Metrics/AbcSize:
   Max: 20
 
