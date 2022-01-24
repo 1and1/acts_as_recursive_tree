@@ -19,11 +19,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: ['2.5', '2.6', '2.7', '3.0']
+        ruby-version: ['2.5', '2.6', '2.7', '3.0', '3.1']
         gemfile: [ar_52, ar_60, ar_61, ar_70]
         exclude:
           - ruby-version: '3.0'
             gemfile: ar_52
+          - ruby-version: '3.1'
+            gemfile: ar_52
+          - ruby-version: '3.1'
+            gemfile: ar_60
+          - ruby-version: '3.1'
+            gemfile: ar_61
           - ruby-version: '2.5'
             gemfile: ar_70
           - ruby-version: '2.6'

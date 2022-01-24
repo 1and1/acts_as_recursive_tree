@@ -16,6 +16,6 @@ appraise 'ar-61' do
 end
 
 appraise 'ar-70' do
-  gem 'activerecord', '~> 7.0.0'
-  gem 'activesupport', '~> 7.0.0'
+  gem 'activerecord', '~> 7.0.1'
+  gem 'activesupport', '~> 7.0.1'
 end

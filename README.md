@@ -19,6 +19,16 @@ ActsAsRecursiveTree currently supports following ActiveRecord versions and is te
   * ActiveRecord 6.1.x
   * ActiveRecord 7.0.x
 
+## Supported Rubies
+ActsAsRecursiveTree is tested with following rubies:
+  * MRuby 2.5
+  * MRuby 2.6
+  * MRuby 2.7
+  * MRuby 3.0
+  * MRuby 3.1
+
+Other Ruby implementations are not tested, but should also work.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -199,17 +209,6 @@ Instance Methods make no difference of the class from which they are called:
 ```ruby
 sub_node_instance.descendants # => returns Node and SubNode instances
 ```
-
-
-## Known Issues
-
-When using PostgreSQL as underlying database system chances are good that you encounter following error message:
-
-`
-ActiveRecord::StatementInvalid: PG::ProtocolViolation: ERROR:  bind message supplies 1 parameters, but prepared statement "" requires 2
-`
-
-This is a known ActiveRecord issue which should be fixed in Rails 5.2. Alternative 
 
 
 ## Contributing
