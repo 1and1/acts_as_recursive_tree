@@ -17,3 +17,4 @@ db.log
 test.sqlite3
 /gemfiles/*.lock
 /gemfiles/.bundle
+/.ruby-version

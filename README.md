@@ -26,6 +26,7 @@ ActsAsRecursiveTree is tested with following rubies:
   * MRuby 2.7
   * MRuby 3.0
   * MRuby 3.1
+  * MRuby 3.2
 
 Other Ruby implementations are not tested, but should also work.
 
