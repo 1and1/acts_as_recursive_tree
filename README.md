@@ -134,7 +134,7 @@ __Additional methods:__
 __Utility methods:__
   * `root?` - returns true if this node is a root node
   * `leaf?` - returns true if this node is a leave node
-
+  * `preload_tree` - fetches all descendants of this node and assignes the proper parent/children associations. You are then able to traverse the tree through the children/parent association without querying the database again.
 
 ## Customizing the recursion
 

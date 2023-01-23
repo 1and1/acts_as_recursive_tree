@@ -1,3 +1,6 @@
+### Version 3.2.0
+- Added #preload_tree method to preload the parent/child relations of a single node
+
 ### Version 3.1.0
 - Rails 7 support
 
