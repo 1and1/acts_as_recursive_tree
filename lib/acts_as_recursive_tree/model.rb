@@ -91,6 +91,14 @@ module ActsAsRecursiveTree
       children.none?
     end
 
+    #
+    # Fetches all descendants of this node and assigns the parent/children associations
+    #
+    def preload_tree
+      ActsAsRecursiveTree::Preloaders::Descendants.new(self).preload!
+      true
+    end
+
     def base_class
       self.class.base_class
     end
