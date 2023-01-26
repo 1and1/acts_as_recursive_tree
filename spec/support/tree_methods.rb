@@ -7,7 +7,7 @@ module TreeMethods
 
     1.upto(max_level - current_level) do |index|
       child = node.children.create!(
-        name:   "child #{index} - level #{current_level}",
+        name: "child #{index} - level #{current_level}",
         active: stop_at > current_level
       )
 
@@ -15,10 +15,10 @@ module TreeMethods
 
       create_tree(
         max_level,
-        current_level:    current_level + 1,
-        node:             child,
+        current_level: current_level + 1,
+        node: child,
         create_node_info: create_node_info,
-        stop_at:          stop_at
+        stop_at: stop_at
       )
     end
 

@@ -1,4 +1,3 @@
-
 RSpec.shared_context 'setup with enforced ordering' do
   let(:ordering) { false }
   include_context 'base_setup' do
