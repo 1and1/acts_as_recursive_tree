@@ -3,56 +3,67 @@
 require 'spec_helper'
 
 RSpec.describe 'Relation' do
-  def create_tree(max_level, current_level: 0, node: nil, stop_at: nil)
-    node = Node.create!(name: 'root') if node.nil?
+  include TreeMethods
 
-    1.upto(max_level - current_level) do |index|
-      child = node.children.create!(name: "child #{index} - level #{current_level}", active: stop_at > current_level)
-      child.create_node_info(status: stop_at > current_level ? 'foo' : 'bar')
-      create_tree(max_level, current_level: current_level + 1, node: child, stop_at: stop_at)
-    end
+  let(:root) { create_tree(4, stop_at: 2) }
 
-    node
-  end
+  describe '#descendants' do
+    context 'with simple relation' do
+      let(:descendants) { root.descendants { |opts| opts.condition = Node.where(active: true) }.to_a }
 
-  before do
-    @root  = create_tree(4, stop_at: 2)
-    @child = @root.children.first
-  end
-
-  context 'descendants' do
-    it 'works with simple relation' do
-      desc = @root.descendants { |opts| opts.condition = Node.where(active: true) }
-      desc.all.each do |node|
-        expect(node.active).to be_truthy
+      it 'returns only active nodes' do
+        descendants.each do |node|
+          expect(node.active).to be_truthy
+        end
       end
     end
 
-    it 'works with joins relation' do
-      desc = @root.descendants { |opts| opts.condition = Node.joins(:node_info).where.not(node_infos: { status: 'bar' }) }
-      desc.all.each do |node|
-        expect(node.node_info.status).to eql('foo')
+    context 'with condition on joined association' do
+      let(:descendants) do
+        root.descendants do |opts|
+          opts.condition = Node.joins(:node_info).where.not(node_infos: { status: 'bar' })
+        end
+      end
+
+      it 'returns only node with condition fulfilled' do
+        descendants.each do |node|
+          expect(node.node_info.status).to eql('foo')
+        end
       end
     end
   end
 
-  context 'ancestors' do
-    it 'works with simple relation' do
-      ancestors = @root.leaves.first.ancestors { |opts| opts.condition = Node.where(active: false) }.to_a
+  describe '#ancestors' do
+    context 'with simple_relation' do
+      let(:ancestors) { root.leaves.first.ancestors { |opts| opts.condition = Node.where(active: false) }.to_a }
 
-      ancestors.each do |node|
-        expect(node.active).to be_falsey
+      it 'return only active nodes' do
+        ancestors.each do |node|
+          expect(node.active).to be_falsey
+        end
       end
 
-      expect(ancestors).not_to include(@root)
+      it 'does not return the root node' do
+        expect(ancestors).not_to include(root)
+      end
     end
 
-    it 'works with joins relation' do
-      ancestors = @root.leaves.first.ancestors { |opts| opts.condition = Node.joins(:node_info).where.not(node_infos: { status: 'foo' }) }
-      ancestors.all.each do |node|
-        expect(node.node_info.status).to eql('bar')
+    context 'with condition on joined association' do
+      let(:ancestors) do
+        root.leaves.first.ancestors do |opts|
+          opts.condition = Node.joins(:node_info).where.not(node_infos: { status: 'foo' })
+        end
       end
-      expect(ancestors).not_to include(@root)
+
+      it 'return only nodes for the matching condition' do
+        ancestors.each do |node|
+          expect(node.node_info.status).to eql('bar')
+        end
+      end
+
+      it 'does not return the root node' do
+        expect(ancestors).not_to include(root)
+      end
     end
   end
 end
