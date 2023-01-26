@@ -1,4 +1,4 @@
-### NEXT
+### Version 3.3.0
 - added __includes:__ option to __preload_tree__
 
 ### Version 3.2.0
