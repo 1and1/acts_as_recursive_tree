@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         ruby-version: ['2.5', '2.6', '2.7', '3.0', '3.1', '3.2']
-        gemfile: [ar_52, ar_60, ar_61, ar_70]
+        gemfile: [ar_52, ar_60, ar_61, ar_70 ar_next]
         exclude:
           - ruby-version: '3.2'
             gemfile: ar_52
@@ -36,9 +36,13 @@ jobs:
             gemfile: ar_61
           - ruby-version: '3.0'
             gemfile: ar_52
-          - ruby-version: '2.5'
-            gemfile: ar_70
           - ruby-version: '2.6'
+            gemfile: ar_next
+          - ruby-version: '2.6'
+            gemfile: ar_70
+          - ruby-version: '2.5'
+            gemfile: ar_next
+          - ruby-version: '2.5'
             gemfile: ar_70
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
