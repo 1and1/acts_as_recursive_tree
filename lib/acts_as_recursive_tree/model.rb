@@ -94,8 +94,10 @@ module ActsAsRecursiveTree
     #
     # Fetches all descendants of this node and assigns the parent/children associations
     #
-    def preload_tree
-      ActsAsRecursiveTree::Preloaders::Descendants.new(self).preload!
+    # @param includes [Array|Hash] pass the same arguments that should be passed to the #includes() method.
+    #
+    def preload_tree(includes: nil)
+      ActsAsRecursiveTree::Preloaders::Descendants.new(self, includes: includes).preload!
       true
     end
 
@@ -107,11 +109,11 @@ module ActsAsRecursiveTree
 
     module ClassMethods
       def self_and_ancestors_of(ids, &block)
-        Builders::Ancestors.build(self, ids, &block)
+        ActsAsRecursiveTree::Builders::Ancestors.build(self, ids, &block)
       end
 
       def ancestors_of(ids, &block)
-        Builders::Ancestors.build(self, ids, exclude_ids: true, &block)
+        ActsAsRecursiveTree::Builders::Ancestors.build(self, ids, exclude_ids: true, &block)
       end
 
       def roots_of(ids)
@@ -119,15 +121,15 @@ module ActsAsRecursiveTree
       end
 
       def self_and_descendants_of(ids, &block)
-        Builders::Descendants.build(self, ids, &block)
+        ActsAsRecursiveTree::Builders::Descendants.build(self, ids, &block)
       end
 
       def descendants_of(ids, &block)
-        Builders::Descendants.build(self, ids, exclude_ids: true, &block)
+        ActsAsRecursiveTree::Builders::Descendants.build(self, ids, exclude_ids: true, &block)
       end
 
       def leaves_of(ids, &block)
-        Builders::Leaves.build(self, ids, &block)
+        ActsAsRecursiveTree::Builders::Leaves.build(self, ids, &block)
       end
     end
   end

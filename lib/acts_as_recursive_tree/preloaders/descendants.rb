@@ -7,9 +7,10 @@ module ActsAsRecursiveTree
     # based on the preloaded data. After this, calling #parent or #children will not trigger a database query.
     #
     class Descendants
-      def initialize(node)
-        @node = node
+      def initialize(node, includes: nil)
+        @node       = node
         @parent_key = node._recursive_tree_config.parent_key
+        @includes   = includes
       end
 
       def preload!
@@ -19,7 +20,11 @@ module ActsAsRecursiveTree
       private
 
       def records
-        @records ||= @node.descendants.to_a
+        @records ||= begin
+          descendants = @node.descendants
+          descendants = descendants.includes(*@includes) if @includes
+          descendants.to_a
+        end
       end
 
       def apply_records(parent_node)

@@ -1,3 +1,6 @@
+### NEXT
+- added __includes:__ option to __preload_tree__
+
 ### Version 3.2.0
 - Added #preload_tree method to preload the parent/child relations of a single node
 
