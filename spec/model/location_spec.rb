@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Location do
+RSpec.describe Location do
   before do
     @building = Building.create!(name: 'big house')
 

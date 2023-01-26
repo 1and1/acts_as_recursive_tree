@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'Relation' do
+RSpec.describe 'Relation' do
   def create_tree(max_level, current_level: 0, node: nil, stop_at: nil)
     node = Node.create!(name: 'root') if node.nil?
 

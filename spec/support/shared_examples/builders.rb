@@ -1,15 +1,12 @@
-# frozen_string_literal: true
 
-require 'spec_helper'
-
-shared_context 'setup with enforced ordering' do
+RSpec.shared_context 'setup with enforced ordering' do
   let(:ordering) { false }
   include_context 'base_setup' do
     let(:proc) { ->(config) { config.ensure_ordering! } }
   end
 end
 
-shared_context 'base_setup' do
+RSpec.shared_context 'base_setup' do
   subject(:query) { builder.build.to_sql }
 
   let(:model_id) { 1 }
@@ -21,7 +18,7 @@ shared_context 'base_setup' do
   end
 end
 
-shared_examples 'basic recursive examples' do
+RSpec.shared_examples 'basic recursive examples' do
   it { is_expected.to start_with "SELECT \"#{model_class.table_name}\".* FROM \"#{model_class.table_name}\"" }
 
   it { is_expected.to match(/WHERE "#{model_class.table_name}"."#{model_class.primary_key}" = #{model_id}/) }
@@ -35,7 +32,7 @@ shared_examples 'basic recursive examples' do
   }
 end
 
-shared_examples 'build recursive query' do
+RSpec.shared_examples 'build recursive query' do
   context 'simple id' do
     context 'with simple class' do
       include_context 'base_setup' do
@@ -67,79 +64,35 @@ shared_examples 'build recursive query' do
   end
 end
 
-shared_examples 'ancestor query' do
+RSpec.shared_examples 'ancestor query' do
   include_context 'base_setup'
 
   it { is_expected.to match(/"#{builder.travers_loc_table.name}"."#{model_class._recursive_tree_config.parent_key}" = "#{model_class.table_name}"."#{model_class.primary_key}"/) }
 end
 
-shared_examples 'descendant query' do
+RSpec.shared_examples 'descendant query' do
   include_context 'base_setup'
 
   it { is_expected.to match(/"#{model_class.table_name}"."#{model_class._recursive_tree_config.parent_key}" = "#{builder.travers_loc_table.name}"."#{model_class.primary_key}"/) }
   it { is_expected.to match(/#{Regexp.escape(builder.travers_loc_table.project(builder.travers_loc_table[model_class.primary_key]).to_sql)}/) }
 end
 
-shared_context 'context with ordering' do
+RSpec.shared_context 'context with ordering' do
   include_context 'base_setup' do
     it_behaves_like 'with ordering'
   end
 end
 
-shared_context 'context without ordering' do
+RSpec.shared_context 'context without ordering' do
   include_context 'base_setup' do
     it_behaves_like 'without ordering'
   end
 end
 
-shared_examples 'with ordering' do
+RSpec.shared_examples 'with ordering' do
   it { is_expected.to match(/ORDER BY #{Regexp.escape(builder.recursive_temp_table[model_class._recursive_tree_config.depth_column].asc.to_sql)}/) }
 end
 
-shared_examples 'without ordering' do
+RSpec.shared_examples 'without ordering' do
   it { is_expected.not_to match(/ORDER BY/) }
-end
-
-describe ActsAsRecursiveTree::Builders::Descendants do
-  context 'basic' do
-    it_behaves_like 'build recursive query'
-    it_behaves_like 'descendant query'
-    include_context 'context without ordering'
-  end
-
-  context 'with options' do
-    include_context 'setup with enforced ordering' do
-      let(:ordering) { true }
-      it_behaves_like 'with ordering'
-    end
-  end
-end
-
-describe ActsAsRecursiveTree::Builders::Ancestors do
-  context 'basic' do
-    it_behaves_like 'build recursive query'
-    it_behaves_like 'ancestor query'
-    include_context 'context with ordering'
-  end
-
-  context 'with options' do
-    include_context 'setup with enforced ordering' do
-      it_behaves_like 'with ordering'
-    end
-  end
-end
-
-describe ActsAsRecursiveTree::Builders::Leaves do
-  context 'basic' do
-    it_behaves_like 'build recursive query'
-    it_behaves_like 'descendant query'
-    include_context 'context without ordering'
-  end
-
-  context 'with options' do
-    include_context 'setup with enforced ordering' do
-      let(:ordering) { true }
-      it_behaves_like 'without ordering'
-    end
-  end
 end

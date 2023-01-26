@@ -2,21 +2,21 @@
 
 require 'spec_helper'
 
-shared_examples 'single values' do
-  subject(:value) { described_class.create(single_value) }
+RSpec.describe ActsAsRecursiveTree::Options::Values do
+  shared_examples 'single values' do
+    subject(:value) { described_class.create(single_value) }
 
-  it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::SingleValue }
+    it { is_expected.to be_a described_class::SingleValue }
 
-  it 'apply_toes' do
-    expect(value.apply_to(attribute).to_sql).to end_with " = #{single_value}"
+    it 'apply_toes' do
+      expect(value.apply_to(attribute).to_sql).to end_with " = #{single_value}"
+    end
+
+    it 'apply_negated_toes' do
+      expect(value.apply_negated_to(attribute).to_sql).to end_with " != #{single_value}"
+    end
   end
 
-  it 'apply_negated_toes' do
-    expect(value.apply_negated_to(attribute).to_sql).to end_with " != #{single_value}"
-  end
-end
-
-describe ActsAsRecursiveTree::Options::Values do
   let(:table) { Arel::Table.new('test_table') }
   let(:attribute) { table['test_attr'] }
 
@@ -44,7 +44,7 @@ describe ActsAsRecursiveTree::Options::Values do
 
       let(:array) { [1, 2, 3] }
 
-      it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::MultiValue }
+      it { is_expected.to be_a described_class::MultiValue }
 
       it 'apply_toes' do
         expect(value.apply_to(attribute).to_sql).to end_with " IN (#{array.join(', ')})"
@@ -60,7 +60,7 @@ describe ActsAsRecursiveTree::Options::Values do
 
       let(:range) { 1..3 }
 
-      it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::RangeValue }
+      it { is_expected.to be_a described_class::RangeValue }
 
       it 'apply_toes' do
         expect(value.apply_to(attribute).to_sql).to end_with "BETWEEN #{range.begin} AND #{range.end}"
@@ -83,7 +83,7 @@ describe ActsAsRecursiveTree::Options::Values do
         end
       end
 
-      it { is_expected.to be_a ActsAsRecursiveTree::Options::Values::Relation }
+      it { is_expected.to be_a described_class::Relation }
 
       it 'apply_toes' do
         expect(value.apply_to(attribute).to_sql).to match(/IN \(SELECT.*\)/)

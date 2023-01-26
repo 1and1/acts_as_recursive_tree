@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Node do
+RSpec.describe Node do
   include TreeMethods
 
   before do
