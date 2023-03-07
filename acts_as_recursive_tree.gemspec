@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'zeitwerk', '>= 2.4'
 
   spec.add_development_dependency 'appraisal', '~> 2.4'
-  spec.add_development_dependency 'database_cleaner', '~> 2.0'
+  spec.add_development_dependency 'database_cleaner-active_record', '~> 2.1'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec-rails', '>= 3.5'
   spec.add_development_dependency 'rubocop', '~> 1.23.0'
