@@ -18,6 +18,7 @@ ActsAsRecursiveTree currently supports following ActiveRecord versions and is te
   * ActiveRecord 6.0.x
   * ActiveRecord 6.1.x
   * ActiveRecord 7.0.x
+  * ActiveRecord 7.1.x
 
 ## Supported Rubies
 ActsAsRecursiveTree is tested with following rubies:

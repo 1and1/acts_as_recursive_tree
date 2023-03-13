@@ -1,3 +1,8 @@
+### Version 3.4.0
+- Rails 7.1 compatibility
+- Added ar_next to test matrix
+- Added updated databasecleaner to test latest active record from git
+
 ### Version 3.3.0
 - added __includes:__ option to __preload_tree__
 
