@@ -20,13 +20,13 @@ RSpec.describe ActsAsRecursiveTree::Options::Values do
   let(:table) { Arel::Table.new('test_table') }
   let(:attribute) { table['test_attr'] }
 
-  context 'invalid agurment' do
+  context 'with invalid agurment' do
     it 'raises exception' do
       expect { described_class.create(nil) }.to raise_exception(/is not supported/)
     end
   end
 
-  context 'single value' do
+  context 'with single value' do
     let(:single_value) { 3 }
 
     it_behaves_like 'single values' do
@@ -38,8 +38,8 @@ RSpec.describe ActsAsRecursiveTree::Options::Values do
     end
   end
 
-  context 'multi value' do
-    context 'Array' do
+  context 'with multi value' do
+    context 'with Array' do
       subject(:value) { described_class.create(array) }
 
       let(:array) { [1, 2, 3] }
@@ -55,7 +55,7 @@ RSpec.describe ActsAsRecursiveTree::Options::Values do
       end
     end
 
-    context 'Range' do
+    context 'with Range' do
       subject(:value) { described_class.create(range) }
 
       let(:range) { 1..3 }
@@ -71,7 +71,7 @@ RSpec.describe ActsAsRecursiveTree::Options::Values do
       end
     end
 
-    context 'Relation' do
+    context 'with Relation' do
       subject(:value) { described_class.create(relation, double) }
 
       let(:relation) { Node.where(name: 'test') }
