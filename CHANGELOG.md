@@ -1,3 +1,6 @@
+### NEXT
+- Added :dependent option for setting explicit 
+
 ### Version 3.4.0
 - Rails 7.1 compatibility
 - Added ar_next to test matrix

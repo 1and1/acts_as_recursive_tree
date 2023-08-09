@@ -55,16 +55,24 @@ class Node  < ActiveRecord::Base
   recursive_tree
 end
 ```
-That's it. This will assume that your model has a column named `parent_id` which will be used for traversal. If your column is something different, then you can specifiy it in the call to `recursive_tree`:
+That's it. This will assume that your model has a column named `parent_id` which will be used for traversal. If your column is something different, then you can specify it in the call to `recursive_tree`:
 
 ```ruby
 recursive_tree parent_key: :some_other_column
 ```
 
-Some extra special stuff - if your parent relation is also polymorphic, the specify the polymorphic column:
+Some extra special stuff - if your parent relation is also polymorphic, then specify the polymorphic column:
 
 ```ruby
 recursive_tree parent_type_column: :some_other_type_column
+```
+
+Controlling deletion behaviour:
+
+By default, it is up to the user code to delete all child nodes in a tree when a parent node gets deleted. This can be controlled by the `:dependent` option, which will be set on the `children` association (see [#has_many](https://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many) in the Rails doc).
+
+```ruby
+recursive_tree dependent: :nullify # or :destroy, etc.
 ```
 
 ## Usage

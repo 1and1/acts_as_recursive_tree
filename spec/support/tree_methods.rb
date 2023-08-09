@@ -3,13 +3,10 @@
 # Helper methods for simple tree creation
 module TreeMethods
   def create_tree(max_level, current_level: 0, node: nil, create_node_info: false, stop_at: -1)
-    node = Node.create!(name: 'root') if node.nil?
+    node ||= Node.create!(name: 'root')
 
     1.upto(max_level - current_level) do |index|
-      child = node.children.create!(
-        name: "child #{index} - level #{current_level}",
-        active: stop_at > current_level
-      )
+      child = node.children.create!(name: "child #{index} - level #{current_level}", active: stop_at > current_level)
 
       child.create_node_info(status: stop_at > current_level ? 'foo' : 'bar') if create_node_info
 
@@ -21,7 +18,6 @@ module TreeMethods
         stop_at: stop_at
       )
     end
-
     node
   end
 end

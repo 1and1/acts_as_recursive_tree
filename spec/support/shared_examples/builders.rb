@@ -1,11 +1,13 @@
-RSpec.shared_context 'setup with enforced ordering' do
+# frozen_string_literal: true
+
+RSpec.shared_context 'with enforced ordering setup' do
   let(:ordering) { false }
-  include_context 'base_setup' do
+  include_context 'with base_setup' do
     let(:proc) { ->(config) { config.ensure_ordering! } }
   end
 end
 
-RSpec.shared_context 'base_setup' do
+RSpec.shared_context 'with base_setup' do
   subject(:query) { builder.build.to_sql }
 
   let(:model_id) { 1 }
@@ -32,30 +34,30 @@ RSpec.shared_examples 'basic recursive examples' do
 end
 
 RSpec.shared_examples 'build recursive query' do
-  context 'simple id' do
+  context 'with simple id' do
     context 'with simple class' do
-      include_context 'base_setup' do
+      include_context 'with base_setup' do
         let(:model_class) { Node }
         it_behaves_like 'basic recursive examples'
       end
     end
 
     context 'with class with different parent key' do
-      include_context 'base_setup' do
+      include_context 'with base_setup' do
         let(:model_class) { NodeWithOtherParentKey }
         it_behaves_like 'basic recursive examples'
       end
     end
 
     context 'with Subclass' do
-      include_context 'base_setup' do
+      include_context 'with base_setup' do
         let(:model_class) { Floor }
         it_behaves_like 'basic recursive examples'
       end
     end
 
     context 'with polymorphic parent relation' do
-      include_context 'base_setup' do
+      include_context 'with base_setup' do
         let(:model_class) { NodeWithPolymorphicParent }
         it_behaves_like 'basic recursive examples'
       end
@@ -64,34 +66,34 @@ RSpec.shared_examples 'build recursive query' do
 end
 
 RSpec.shared_examples 'ancestor query' do
-  include_context 'base_setup'
+  include_context 'with base_setup'
 
   it { is_expected.to match(/"#{builder.travers_loc_table.name}"."#{model_class._recursive_tree_config.parent_key}" = "#{model_class.table_name}"."#{model_class.primary_key}"/) }
 end
 
 RSpec.shared_examples 'descendant query' do
-  include_context 'base_setup'
+  include_context 'with base_setup'
 
   it { is_expected.to match(/"#{model_class.table_name}"."#{model_class._recursive_tree_config.parent_key}" = "#{builder.travers_loc_table.name}"."#{model_class.primary_key}"/) }
   it { is_expected.to match(/#{Regexp.escape(builder.travers_loc_table.project(builder.travers_loc_table[model_class.primary_key]).to_sql)}/) }
 end
 
-RSpec.shared_context 'context with ordering' do
-  include_context 'base_setup' do
-    it_behaves_like 'with ordering'
+RSpec.shared_context 'with ordering' do
+  include_context 'with base_setup' do
+    it_behaves_like 'is adding ordering'
   end
 end
 
-RSpec.shared_context 'context without ordering' do
-  include_context 'base_setup' do
-    it_behaves_like 'without ordering'
+RSpec.shared_context 'without ordering' do
+  include_context 'with base_setup' do
+    it_behaves_like 'not adding ordering'
   end
 end
 
-RSpec.shared_examples 'with ordering' do
+RSpec.shared_examples 'is adding ordering' do
   it { is_expected.to match(/ORDER BY #{Regexp.escape(builder.recursive_temp_table[model_class._recursive_tree_config.depth_column].asc.to_sql)}/) }
 end
 
-RSpec.shared_examples 'without ordering' do
+RSpec.shared_examples 'not adding ordering' do
   it { is_expected.not_to match(/ORDER BY/) }
 end

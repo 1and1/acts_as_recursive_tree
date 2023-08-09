@@ -3,16 +3,16 @@
 require 'spec_helper'
 
 RSpec.describe ActsAsRecursiveTree::Builders::Descendants do
-  context 'basic' do
+  context 'without additional setup' do
     it_behaves_like 'build recursive query'
     it_behaves_like 'descendant query'
-    include_context 'context without ordering'
+    include_context 'without ordering'
   end
 
   context 'with options' do
-    include_context 'setup with enforced ordering' do
+    include_context 'with enforced ordering setup' do
       let(:ordering) { true }
-      it_behaves_like 'with ordering'
+      it_behaves_like 'is adding ordering'
     end
   end
 end
