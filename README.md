@@ -224,6 +224,15 @@ Instance Methods make no difference of the class from which they are called:
 sub_node_instance.descendants # => returns Node and SubNode instances
 ```
 
+## A note on endless recursion / cycle detection
+
+### Inserting
+As of now it is up to the user code to guarantee there will be no cycles created in the parent/child entries. If not, your DB might run into an endless recursion. Inserting/updating records that will cause a cycle is not prevented by some validation checks, so you have to do this by your own. This might change in a future version.
+
+### Querying
+If you want to make sure to not run into an endless recursion when querying, then there are following options:
+1. Add a maximum depth to the query options. If an cycle is present in your data, the recursion will stop when reaching the max depth and stop further traversing.
+2. When you are on recent version of PostgreSQL (14+) you are lucky. Postgres added the CYCLE detection feature to detect cycles and prevent endless recursion. Our query builder will add this feature if your DB does support this.  
 
 ## Contributing
 

@@ -1,5 +1,6 @@
 ### NEXT
-- Added :dependent option for setting explicit 
+- Added :dependent option for setting explicit deletion behaviour (issue #31)
+- Added automatic cycle detection when supported (currently only PostgresSQL 14+) (issue #22)
 
 ### Version 3.4.0
 - Rails 7.1 compatibility

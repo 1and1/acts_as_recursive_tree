@@ -21,5 +21,15 @@ module ActsAsRecursiveTree
     def primary_key
       @primary_key ||= @model_class.primary_key.to_sym
     end
+
+    #
+    # Checks if SQL cycle detection can be used. This is currently supported only on PostgreSQL 14+.
+    # @return [TrueClass|FalseClass]
+    def cycle_detection?
+      return @cycle_detection if defined?(@cycle_detection)
+
+      @cycle_detection = @model_class.connection.adapter_name == 'PostgreSQL' &&
+                         @model_class.connection.database_version >= 140_000
+    end
   end
 end
