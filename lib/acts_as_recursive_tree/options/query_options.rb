@@ -5,6 +5,12 @@ module ActsAsRecursiveTree
     class QueryOptions
       STRATEGIES = %i[subselect join].freeze
 
+      def self.from
+        options = new
+        yield(options) if block_given?
+        options
+      end
+
       attr_accessor :condition
       attr_reader :ensure_ordering, :query_strategy
 

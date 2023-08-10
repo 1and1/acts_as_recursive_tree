@@ -5,7 +5,7 @@ module ActsAsRecursiveTree
     class Ancestors < RelationBuilder
       self.traversal_strategy = ActsAsRecursiveTree::Builders::Strategies::Ancestor
 
-      def get_query_options(_)
+      def get_query_options(&block)
         opts = super
         opts.ensure_ordering!
         opts

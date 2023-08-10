@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'securerandom'
+
 module ActsAsRecursiveTree
   module Builders
     #
@@ -12,40 +14,42 @@ module ActsAsRecursiveTree
 
       class_attribute :traversal_strategy, instance_writer: false
 
-      attr_reader :klass, :ids, :recursive_temp_table, :travers_loc_table, :without_ids
-
-      mattr_reader(:random) { Random.new }
+      attr_reader :klass, :ids, :without_ids
 
       # Delegators for easier accessing config and query options
-      delegate :primary_key, :depth_column, :parent_key, :parent_type_column, to: :@config
+      delegate :primary_key, :depth_column, :parent_key, :parent_type_column, to: :config
       delegate :depth_present?, :depth, :condition, :ensure_ordering, to: :@query_opts
 
       def initialize(klass, ids, exclude_ids: false, &block)
         @klass       = klass
-        @config      = klass._recursive_tree_config
-        @ids         = ActsAsRecursiveTree::Options::Values.create(ids, @config)
+        @ids         = ActsAsRecursiveTree::Options::Values.create(ids, klass._recursive_tree_config)
         @without_ids = exclude_ids
 
-        @query_opts = get_query_options(block)
+        @query_opts = get_query_options(&block)
 
-        rand_int              = random.rand(1_000_000)
-        @recursive_temp_table = Arel::Table.new("recursive_#{klass.table_name}_#{rand_int}_temp")
-        @travers_loc_table    = Arel::Table.new("traverse_#{rand_int}_loc")
+        # random seed for the temp tables
+        @rand_int = SecureRandom.rand(1_000_000)
+      end
+
+      def recursive_temp_table
+        @recursive_temp_table ||= Arel::Table.new("recursive_#{klass.table_name}_#{@rand_int}_temp")
+      end
+
+      def travers_loc_table
+        @travers_loc_table ||= Arel::Table.new("traverse_#{@rand_int}_loc")
+      end
+
+      def config
+        klass._recursive_tree_config
       end
 
       #
       # Constructs a new QueryOptions and yield it to the proc if one is present.
       # Subclasses may override this method to provide sane defaults.
       #
-      # @param proc [Proc] a proc or nil
-      #
       # @return [ActsAsRecursiveTree::Options::QueryOptions] the new QueryOptions instance
-      def get_query_options(proc)
-        opts = ActsAsRecursiveTree::Options::QueryOptions.new
-
-        proc&.call(opts)
-
-        opts
+      def get_query_options(&block)
+        ActsAsRecursiveTree::Options::QueryOptions.from(&block)
       end
 
       def base_table
@@ -71,11 +75,7 @@ module ActsAsRecursiveTree
       end
 
       def create_select_manger(column = nil)
-        projections = if column
-                        travers_loc_table[column]
-                      else
-                        Arel.star
-                      end
+        projections = column ? travers_loc_table[column] : Arel.star
 
         select_mgr = travers_loc_table.project(projections).with(:recursive, build_cte_table)
 
@@ -85,10 +85,24 @@ module ActsAsRecursiveTree
       def build_cte_table
         Arel::Nodes::As.new(
           travers_loc_table,
-          build_base_select.union(build_union_select)
+          add_pg_cycle_detection(
+            build_base_select.union(build_union_select)
+          )
         )
       end
 
+      def add_pg_cycle_detection(union_query)
+        return union_query unless config.cycle_detection?
+
+        Arel::Nodes::InfixOperation.new(
+          '',
+          union_query,
+          Arel.sql("CYCLE #{primary_key} SET is_cycle USING path")
+        )
+      end
+
+      # Builds SQL:
+      # SELECT id, parent_id, 0 AS depth FROM base_table WHERE id = 123
       def build_base_select
         id_node = base_table[primary_key]
 
