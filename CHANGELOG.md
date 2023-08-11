@@ -1,4 +1,4 @@
-### NEXT
+### Version 3.5.0
 - Added :dependent option for setting explicit deletion behaviour (issue #31)
 - Added automatic cycle detection when supported (currently only PostgresSQL 14+) (issue #22)
 
