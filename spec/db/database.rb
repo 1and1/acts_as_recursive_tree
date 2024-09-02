@@ -10,7 +10,7 @@ ActiveRecord::Base.logger = nil
 
 ActiveRecord::Migration.verbose = false
 
-ActiveRecord::Base.configurations = YAML.safe_load(File.read("#{database_folder}/database.yml"))
+ActiveRecord::Base.configurations = YAML.safe_load_file("#{database_folder}/database.yml")
 
 if ActiveRecord.version >= Gem::Version.new('6.1.0')
   config = ActiveRecord::Base.configurations.configs_for env_name: database_adapter, name: 'primary'

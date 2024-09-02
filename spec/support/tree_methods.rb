@@ -14,8 +14,8 @@ module TreeMethods
         max_level,
         current_level: current_level + 1,
         node: child,
-        create_node_info: create_node_info,
-        stop_at: stop_at
+        create_node_info:,
+        stop_at:
       )
     end
     node

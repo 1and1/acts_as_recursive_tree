@@ -15,7 +15,7 @@ RSpec.shared_context 'with base_setup' do
   let(:exclude_ids) { false }
   let(:proc) { nil }
   let(:builder) do
-    described_class.new(model_class, model_id, exclude_ids: exclude_ids, &proc)
+    described_class.new(model_class, model_id, exclude_ids:, &proc)
   end
 end
 

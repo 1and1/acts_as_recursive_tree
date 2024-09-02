@@ -16,7 +16,7 @@ module ActsAsRecursiveTree
         select_manager
       end
 
-      def get_query_options(&_block)
+      def get_query_options(&)
         # do not allow any custom options
         ActsAsRecursiveTree::Options::QueryOptions.new
       end

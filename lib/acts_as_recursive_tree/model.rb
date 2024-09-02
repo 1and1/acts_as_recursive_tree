@@ -9,16 +9,16 @@ module ActsAsRecursiveTree
     #
     # subchild1.ancestors # => [child1, root]
     #
-    def ancestors(&block)
-      base_class.ancestors_of(self, &block)
+    def ancestors(&)
+      base_class.ancestors_of(self, &)
     end
 
     # Returns ancestors and current node itself.
     #
     # subchild1.self_and_ancestors # => [subchild1, child1, root]
     #
-    def self_and_ancestors(&block)
-      base_class.self_and_ancestors_of(self, &block)
+    def self_and_ancestors(&)
+      base_class.self_and_ancestors_of(self, &)
     end
 
     ##
@@ -26,8 +26,8 @@ module ActsAsRecursiveTree
     #
     # root.descendants # => [child1, child2, subchild1, subchild2, subchild3, subchild4]
     #
-    def descendants(&block)
-      base_class.descendants_of(self, &block)
+    def descendants(&)
+      base_class.descendants_of(self, &)
     end
 
     ##
@@ -35,8 +35,8 @@ module ActsAsRecursiveTree
     #
     # root.self_and_descendants # => [root, child1, child2, subchild1, subchild2, subchild3, subchild4]
     #
-    def self_and_descendants(&block)
-      base_class.self_and_descendants_of(self, &block)
+    def self_and_descendants(&)
+      base_class.self_and_descendants_of(self, &)
     end
 
     ##
@@ -50,7 +50,7 @@ module ActsAsRecursiveTree
     #
     # subchild1.siblings # => [subchild2]
     def siblings
-      self_and_siblings.where.not(id: id)
+      self_and_siblings.where.not(id:)
     end
 
     ##
@@ -97,7 +97,7 @@ module ActsAsRecursiveTree
     # @param includes [Array|Hash] pass the same arguments that should be passed to the #includes() method.
     #
     def preload_tree(includes: nil)
-      ActsAsRecursiveTree::Preloaders::Descendants.new(self, includes: includes).preload!
+      ActsAsRecursiveTree::Preloaders::Descendants.new(self, includes:).preload!
       true
     end
 
@@ -108,28 +108,28 @@ module ActsAsRecursiveTree
     private :base_class
 
     module ClassMethods
-      def self_and_ancestors_of(ids, &block)
-        ActsAsRecursiveTree::Builders::Ancestors.build(self, ids, &block)
+      def self_and_ancestors_of(ids, &)
+        ActsAsRecursiveTree::Builders::Ancestors.build(self, ids, &)
       end
 
-      def ancestors_of(ids, &block)
-        ActsAsRecursiveTree::Builders::Ancestors.build(self, ids, exclude_ids: true, &block)
+      def ancestors_of(ids, &)
+        ActsAsRecursiveTree::Builders::Ancestors.build(self, ids, exclude_ids: true, &)
       end
 
       def roots_of(ids)
         self_and_ancestors_of(ids).roots
       end
 
-      def self_and_descendants_of(ids, &block)
-        ActsAsRecursiveTree::Builders::Descendants.build(self, ids, &block)
+      def self_and_descendants_of(ids, &)
+        ActsAsRecursiveTree::Builders::Descendants.build(self, ids, &)
       end
 
-      def descendants_of(ids, &block)
-        ActsAsRecursiveTree::Builders::Descendants.build(self, ids, exclude_ids: true, &block)
+      def descendants_of(ids, &)
+        ActsAsRecursiveTree::Builders::Descendants.build(self, ids, exclude_ids: true, &)
       end
 
-      def leaves_of(ids, &block)
-        ActsAsRecursiveTree::Builders::Leaves.build(self, ids, &block)
+      def leaves_of(ids, &)
+        ActsAsRecursiveTree::Builders::Leaves.build(self, ids, &)
       end
     end
   end

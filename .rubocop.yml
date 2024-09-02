@@ -5,9 +5,12 @@ require:
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 3.1
   NewCops: enable
   SuggestExtensions: false
+
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec
 
 Gemspec/RequireMFA:
   Enabled: false
@@ -23,6 +26,9 @@ RSpec/NestedGroups:
 
 Style/Alias:
   EnforcedStyle: prefer_alias
+
+Style/Documentation:
+  Enabled: false
 
 Style/FrozenStringLiteralComment:
   Exclude:

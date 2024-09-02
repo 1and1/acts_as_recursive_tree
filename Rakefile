@@ -10,6 +10,6 @@ task default: [:spec]
 desc 'Deletes temporary files'
 task :clean_tmp_files do
   %w[db.log test.sqlite3].each do |file|
-    File.delete(file) if File.exist?(file)
+    FileUtils.rm_f(file)
   end
 end
