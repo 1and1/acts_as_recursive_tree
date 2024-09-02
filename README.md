@@ -14,20 +14,16 @@ Luckily, there is already a SQL standard that makes it very easy to retrieve dat
 
 ## Supported environments
 ActsAsRecursiveTree currently supports following ActiveRecord versions and is tested for compatibility:
-  * ActiveRecord 5.2.x
-  * ActiveRecord 6.0.x
-  * ActiveRecord 6.1.x
   * ActiveRecord 7.0.x
   * ActiveRecord 7.1.x
+  * ActiveRecord 7.2.x
+  * ActiveRecord NEXT (from git)
 
 ## Supported Rubies
 ActsAsRecursiveTree is tested with following rubies:
-  * MRuby 2.5
-  * MRuby 2.6
-  * MRuby 2.7
-  * MRuby 3.0
   * MRuby 3.1
   * MRuby 3.2
+  * MRuby 3.3
 
 Other Ruby implementations are not tested, but should also work.
 

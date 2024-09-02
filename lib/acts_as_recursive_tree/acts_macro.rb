@@ -14,7 +14,7 @@ module ActsAsRecursiveTree
         model_class: self,
         parent_key: parent_key.to_sym,
         parent_type_column: parent_type_column.try(:to_sym),
-        dependent: dependent
+        dependent:
       )
 
       include ActsAsRecursiveTree::Model

@@ -9,7 +9,7 @@ module ActsAsRecursiveTree
     #
     class RelationBuilder
       def self.build(klass, ids, exclude_ids: false, &block)
-        new(klass, ids, exclude_ids: exclude_ids, &block).build
+        new(klass, ids, exclude_ids:, &block).build
       end
 
       class_attribute :traversal_strategy, instance_writer: false
@@ -48,8 +48,8 @@ module ActsAsRecursiveTree
       # Subclasses may override this method to provide sane defaults.
       #
       # @return [ActsAsRecursiveTree::Options::QueryOptions] the new QueryOptions instance
-      def get_query_options(&block)
-        ActsAsRecursiveTree::Options::QueryOptions.from(&block)
+      def get_query_options(&)
+        ActsAsRecursiveTree::Options::QueryOptions.from(&)
       end
 
       def base_table

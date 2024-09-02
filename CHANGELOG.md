@@ -1,3 +1,8 @@
+### Version 4.0.0
+- ADD: Support for Rails 7.2 
+- BREAKING: Dropped support for Rails < 7
+- BREAKING: Dropped support old Rubies < 3.1 
+
 ### Version 3.5.0
 - Added :dependent option for setting explicit deletion behaviour (issue #31)
 - Added automatic cycle detection when supported (currently only PostgresSQL 14+) (issue #22)
