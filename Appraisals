@@ -15,6 +15,11 @@ appraise 'ar-72' do
   gem 'activesupport', '~> 7.2'
 end
 
+appraise 'ar-80' do
+  gem 'activerecord', '~> 8.0'
+  gem 'activesupport', '~> 8.0'
+end
+
 appraise 'ar-next' do
   git 'https://github.com/rails/rails.git', branch: 'main' do
     gem 'activerecord'

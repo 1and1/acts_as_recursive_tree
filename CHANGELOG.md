@@ -1,3 +1,6 @@
+### Version 4.1.0
+- ADD: Support for Rails 8.0
+
 ### Version 4.0.0
 - ADD: Support for Rails 7.2 
 - BREAKING: Dropped support for Rails < 7

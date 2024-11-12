@@ -22,17 +22,17 @@ Gem::Specification.new do |spec|
   spec.files                 = `git ls-files -z`.split("\x0")
   spec.require_paths         = ['lib']
 
-  spec.add_dependency 'activerecord', '>= 7.0.0', '< 8'
-  spec.add_dependency 'activesupport', '>= 7.0.0', '< 8'
+  spec.add_dependency 'activerecord', '>= 7.0.0', '< 9'
+  spec.add_dependency 'activesupport', '>= 7.0.0', '< 9'
   spec.add_dependency 'zeitwerk', '>= 2.4'
 
   spec.add_development_dependency 'appraisal', '~> 2.5'
   spec.add_development_dependency 'database_cleaner-active_record', '~> 2.2'
   spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec-rails', '>= 6.1'
-  spec.add_development_dependency 'rubocop', '~> 1.66.0'
-  spec.add_development_dependency 'rubocop-rails', '~> 2.26.0'
-  spec.add_development_dependency 'rubocop-rspec', '~> 3.0.4'
+  spec.add_development_dependency 'rspec-rails', '>= 7.1'
+  spec.add_development_dependency 'rubocop', '~> 1.68.0'
+  spec.add_development_dependency 'rubocop-rails', '~> 2.27.0'
+  spec.add_development_dependency 'rubocop-rspec', '~> 3.2.0'
 
   spec.add_development_dependency 'sqlite3', '~> 2.0'
 end
