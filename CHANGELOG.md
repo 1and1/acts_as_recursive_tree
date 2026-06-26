@@ -1,3 +1,6 @@
+### Version 4.1.1
+- ADD: Future support for change in Rails 8.2
+
 ### Version 4.1.0
 - ADD: Support for Rails 8.0
 
