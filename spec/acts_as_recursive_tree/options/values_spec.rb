@@ -17,7 +17,7 @@ RSpec.describe ActsAsRecursiveTree::Options::Values do
     end
   end
 
-  let(:table) { Arel::Table.new('test_table') }
+  let(:table) { Location.arel_table }
   let(:attribute) { table['test_attr'] }
 
   context 'with invalid agurment' do

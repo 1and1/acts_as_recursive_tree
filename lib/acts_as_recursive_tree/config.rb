@@ -31,5 +31,11 @@ module ActsAsRecursiveTree
       @cycle_detection = @model_class.connection.adapter_name == 'PostgreSQL' &&
                          @model_class.connection.database_version >= 140_000
     end
+
+    def arel_table_requires_keyword_args?
+      return @arel_table_requires_keyword_args if defined?(@arel_table_requires_keyword_args)
+
+      @arel_table_requires_keyword_args = ::ActiveRecord.version >= '8.2.0.alpha'
+    end
   end
 end

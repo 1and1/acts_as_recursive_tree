@@ -32,11 +32,15 @@ module ActsAsRecursiveTree
       end
 
       def recursive_temp_table
-        @recursive_temp_table ||= Arel::Table.new("recursive_#{klass.table_name}_#{@rand_int}_temp")
+        @recursive_temp_table ||= arel_table("recursive_#{klass.table_name}_#{@rand_int}_temp")
       end
 
       def travers_loc_table
-        @travers_loc_table ||= Arel::Table.new("traverse_#{@rand_int}_loc")
+        @travers_loc_table ||= arel_table("traverse_#{@rand_int}_loc")
+      end
+
+      def arel_table(name)
+        config.arel_table_requires_keyword_args? ? Arel::Table.new(name: name) : Arel::Table.new(name)
       end
 
       def config
